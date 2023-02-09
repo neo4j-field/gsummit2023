@@ -1,4 +1,3 @@
-// # Set Parameter to filename loaded
 :param filenameOpUnits => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/OperationUnits.csv';
 :param filenameTracks => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/Tracks.csv';
 // Point of Interest Data
@@ -168,5 +167,3 @@ MATCH (st:Station {shortcut: scut})
 MATCH (po:POI {shortcut: scut})
 CREATE (po)-[:HAS_POI]->(st)
 RETURN count(*);
-
-// DONE LOADING
