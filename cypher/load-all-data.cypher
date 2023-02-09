@@ -30,7 +30,8 @@ LOAD CSV WITH HEADERS FROM $filenameOpUnits AS line FIELDTERMINATOR ';'
 WITH line.TRACK_NUM AS trackNr, line.DIRECTION AS direction, line.KM_I AS kmi, line.DESCRIPTION AS description, line.UNIT_KIND AS unitKind, line.SHORTCUT AS shortcut, line.LAT AS lat, line.LONG AS long
 MERGE (ou:OperationUnit {shortcut:shortcut})
 SET ou.description = description,
-ou.unitKind = unitKind
+ou.unitKind = unitKind,
+ou.geocord = point({latitude: toFloat(replace(lat,',','.')),longitude: toFloat(replace(long,',','.'))})
 WITH *
 FOREACH (_ IN CASE WHEN ou.unitKind='St' THEN [true] ELSE [] END |
 SET ou:Station)
