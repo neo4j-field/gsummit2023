@@ -1,8 +1,8 @@
 // # Set Parameter to filename loaded
-:param filenameOpUnits => 'file:/OperationUnits.csv';
-:param filenameTracks => 'file:/Tracks.csv';
+:param filenameOpUnits => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/OperationUnits.csv';
+:param filenameTracks => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/Tracks.csv';
 // Point of Interest Data
-:param filenamePOIs => 'file:/POI_Germany_v2.csv';
+:param filenamePOIs => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/POIs.csv';
 
 //
 // Create indexes first
