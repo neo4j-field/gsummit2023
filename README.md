@@ -87,6 +87,6 @@ The data set contains different operational Units, whereas an OU can be from dif
 - ConnectionPoint = "CoPt"
 - StopPointBlockPoint = "Hp Bk"
 - BlockPoint = "Bk"
-- Streckenwechsel = "Trch"
+- Track Change = "Trch"
 
 ---
