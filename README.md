@@ -91,7 +91,6 @@ The data set contains different operational Units, whereas an OU can be from dif
 
 ---
 
----
 
 ## Building the demo environment
 
