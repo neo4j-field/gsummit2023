@@ -1,4 +1,4 @@
-# Graph Summit 2023 EMEA - Workshop Digital Twin
+# Graph Summit 2023 EMEA - Workshop Digital Twin (work in progress!)
 
 This repository contains the workshop material used during the **Graph Summit 2023 Workshops**. All code, data, dashboards, Bloom perspectives and slides are available for dowload.
 
@@ -90,3 +90,16 @@ The data set contains different operational Units, whereas an OU can be from dif
 - Track Change = "Trch"
 
 ---
+
+---
+
+## Building the demo environment
+
+The following high level steps are required, to build the demo environment:
+
+1. Download and install [Neo4j Desktop](https://neo4j.com/download-center/). Since we use some Graph Data Science Algorithms during the demo, we require the **GDS Library** to be installed. **Installation instruction** can be found [here](https://neo4j.com/docs/desktop-manual/current/).
+- As an alternative, you can run an [Neo4j Sandbox for Data Scientists](https://sandbox.neo4j.com/?ref=neo4j-home-hero&persona=data-scientist) from (https://sandbox.neo4j.com/ and use an "Blank Sandbox"
+
+2. Open Neo4j Browser and run the load-all-data.cypher script from the code directory above. You can cut & paste the code into the Neo4j Browser command line.
+
+3. 
