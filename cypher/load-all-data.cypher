@@ -148,6 +148,14 @@ WHERE ou.unitKind = "Trch"
 SET ou:TrackChange
 RETURN count(*);
 
+// Remove Label OperationUnit, since all OUs are now labeled according to their kind
+MATCH (o:OperationUnit)
+REMOVE o:OperationUnit;
+
+// In order to get everything removed point to the Label OperationUnit, remove the index created above
+// Therefore run the command "SHOW INDEXES;" and find the index name for the OperationUnit and shortcut index
+// Then run a "DROP INDEX <name-of-index>;"
+
 //
 // Load all Points of Interest and create relationship to the closest Station near the Point of Interest --> may be the same Geo Coordinates, 
 // in case it is a main city e.g. Berlin, or different Coordinates if the PoI is off in the country side!
