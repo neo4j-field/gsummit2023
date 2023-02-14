@@ -103,5 +103,5 @@ The following high level steps are required, to build the demo environment:
 
 3. After the script has finished loading, you can check your data model. It should look like the following:
 
-<img width="540" alt="gsummit23_DM_1" src="https://user-images.githubusercontent.com/8035021/218688630-fb58ff61-47bb-4b72-95e5-f029e9854580.png">
+<img width="540" alt="Data Model - Digital Twin" src="">
 
