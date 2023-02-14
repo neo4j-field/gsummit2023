@@ -103,5 +103,5 @@ The following high level steps are required, to build the demo environment:
 
 3. After the script has finished loading, you can check your data model. It should look like the following:
 
-<img width="540" alt="Data Model - Digital Twin" src="">
+<img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/876671ea71d22341f574e8e283d8b7155fef8e5a/images/gsummit23_DM_1.png">
 
