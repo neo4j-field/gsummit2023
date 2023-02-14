@@ -106,7 +106,7 @@ The following high level steps are required, to build the demo environment:
 <img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/876671ea71d22341f574e8e283d8b7155fef8e5a/images/gsummit23_DM_1.png">
 
 
-As you can see now in the data model, there is a station label and it is connected to itself. This means, stations are connected together (as in the real world). A station IS AT a certain track or in other words, lies at a certain track. Same is true for all other OperationUnits like Switches, Stop Points, etc. that are all allong a certain track and hence connected to the track with the relationship type IS_AT, too.
+As you can see now in the data model, there is a station label and it is connected to itself with a CONNECTED_TO relationship. This means, stations are connected together (as in the real world). A station IS AT a certain track or in other words, lies at a certain track. Same is true for all other OperationUnits like Switches, Stop Points, etc. that are all allong a certain track and hence connected to the track with the relationship type IS_AT, too.
 
 4. Now you can find certain queries in the `./code` directory in the file called `all_queries.cypher`. Try them out by cutting and pasting them into the Neo4j browser.
 
