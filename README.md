@@ -103,7 +103,7 @@ The following high level steps are required, to build the demo environment:
 
 3. After the script has finished loading, you can check your data model. It should look like the following:
 
-<img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/876671ea71d22341f574e8e283d8b7155fef8e5a/images/gsummit23_DM_1.png">
+<img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/d6c898d8225b0cb146ba900af947269f17930895/images/dm-simple-verion.png">
 
 
 As you can see now in the data model, there is a station label and it is connected to itself with a CONNECTED_TO relationship. This means, stations are connected together (as in the real world). A station IS AT a certain track or in other words, lies at a certain track. Same is true for all other OperationUnits like Switches, Stop Points, etc. that are all allong a certain track and hence connected to the track with the relationship type IS_AT, too.
