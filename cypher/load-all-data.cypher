@@ -6,72 +6,99 @@
 //
 // Create indexes first
 //
-CREATE INDEX FOR (s:Station) ON (s.shortcut);
-CREATE INDEX FOR (t:Track) ON (t.TrackNr);
-CREATE INDEX FOR (op:OperationUnit) ON (op.shortcut);
-CREATE POINT INDEX FOR (s:Station) ON (s.geocord);
+CREATE INDEX FOR (n:Station) ON (n.shortcut);
+CREATE INDEX FOR (n:Track) ON (n.trackNr);
+CREATE INDEX FOR (n:OperationUnit) ON (n.shortcut);
+CREATE INDEX FOR (n:OperationUnit) ON (n.geocord);
+
+//============= LOAD Stations first ==================
+
+//
+// Load all Operation Units
+//
+LOAD CSV WITH HEADERS FROM $filenameOpUnits AS line FIELDTERMINATOR ';'
+WITH line.TRACK_NUM AS trackNr, line.DIRECTION AS direction, line.KM_I AS kmi, line.KM_L AS kml, line.DESCRIPTION AS description, line.UNIT_KIND AS unitKind, line.SHORTCUT AS shortcut, line.GK_R_DGN AS gkrDgn, line.GK_H_DGN AS gkhDgn, line.LAT AS lat, line.LONG AS long
+CREATE (ou:OperationUnit {geocord:point({latitude: toFloat(replace(lat,',','.')),longitude: toFloat(replace(long,',','.'))})})
+SET ou.direction = direction,
+ou.kmi = toInteger(kmi),
+ou.kml = kml,
+ou.description = description,
+ou.unitKind = unitKind,
+ou.shortcut = shortcut,
+ou.gkrDgn = toFloat(replace(gkrDgn,',','.')),
+ou.gkhDgn = toFloat(replace(gkhDgn,',','.'))
+MERGE (t:Track{trackNr:toInteger(trackNr)})
+MERGE (ou)-[:ON_TRACK]->(t)
+RETURN count(*);
+
+//
+// Update Operation Units with additional Label Station
+//
+MATCH (ou:OperationUnit)
+WHERE ou.unitKind = "St"
+SET ou:Station
+RETURN count(*);
 
 //
 // Load Tracks
 //
 LOAD CSV WITH HEADERS FROM $filenameTracks AS line FIELDTERMINATOR ';'
 WITH line.TRACKNR AS trackNr, line.KMSTR_E AS kmstrE, line.KMEND_E AS kmendE, line.KMSTR_V AS kmstrV, line.TRACKNAME AS trackName, line.TRACKSHCUT AS trackShortCut
-CREATE (t:Track {trackNr: toInteger(trackNr)})
-SET t.kmstrE = toInteger(kmstrE),
-   t.kmendE = toInteger(kmendE),
-   t.trackName = trackName,
-   t.trackShortCut = trackShortCut
+MATCH (st:Track {trackNr: toInteger(trackNr)})
+SET st.kmstrE = toInteger(kmstrE),
+st.kmendE = toInteger(kmendE),
+st.trackName = trackName,
+st.trackShortCut = trackShortCut
 RETURN count(*);
 
 //
-// Load all Operation Units
+// Creating Hubs for Operation Units with common shortcuts
 //
-LOAD CSV WITH HEADERS FROM $filenameOpUnits AS line FIELDTERMINATOR ';'
-WITH line.TRACK_NUM AS trackNr, line.DIRECTION AS direction, line.KM_I AS kmi, line.DESCRIPTION AS description, line.UNIT_KIND AS unitKind, line.SHORTCUT AS shortcut, line.LAT AS lat, line.LONG AS long
-MERGE (ou:OperationUnit {shortcut:shortcut})
-SET ou.description = description,
-ou.unitKind = unitKind,
-ou.geocord = point({latitude: toFloat(replace(lat,',','.')),longitude: toFloat(replace(long,',','.'))})
+MATCH (ou:OperationUnit) 
+WITH ou.shortcut as shortcut, collect(ou) AS ous, size(collect(ou)) as num where num>1 
+WITH *, ous[0] AS first
+CREATE (h:Hub {art: first.art,
+description: first.description,
+long: first.long,
+lat: first.lat,
+geocord: first.geocord,
+shortcut: first.shortcut})
 WITH *
-FOREACH (_ IN CASE WHEN ou.unitKind='St' THEN [true] ELSE [] END |
-SET ou:Station)
-WITH *
-MATCH (t:Track{trackNr:toInteger(trackNr)})
-MERGE (ou)-[r:IS_AT]->(t)
-SET r.direction = direction,
-r.kmi = toInteger(kmi),
-r.shortcut = shortcut,
-r.long = toFloat(replace(long,',','.')),
-r.lat = toFloat(replace(lat,',','.')),
-r.geocord = point({latitude: toFloat(replace(lat,',','.')),longitude: toFloat(replace(long,',','.'))})
-RETURN count(*);
+UNWIND ous AS ou
+CREATE (ou)-[:LOCATED_AT]->(h);
 
 //
-// Chaining up places/stations
+// Creating Hubs for Stations
 //
-MATCH (st:Station)-[r:IS_AT]->(s:Track)
+MATCH (ou:Station)
+WITH ou.shortcut as shortcut, collect(ou) AS ous, size(collect(ou)) as num where num=1
+WITH *, ous[0] AS first
+CREATE (h:Hub {art: first.art,
+description: first.description,
+long: first.long,
+lat: first.lat,
+geocord: first.geocord,
+shortcut: first.shortcut})
 WITH *
-ORDER BY r.kmi
-WITH collect(st) AS o_, s WHERE size(o_)>1
+UNWIND ous AS ou
+CREATE (ou)-[:LOCATED_AT]->(h);
+
+//
+// Chaining up places
+//
+MATCH (o:Hub)<-[:LOCATED_AT]-(bs:OperationUnit)-[:ON_TRACK]->(s:Track)
+WITH *
+ORDER BY bs.kmi
+WITH collect( DISTINCT o) AS o_, s WHERE size(o_)>1
 FOREACH (i in range(0, size(o_) - 2) |
 FOREACH (node1 in [o_[i]] |
- FOREACH (node2 in [o_[i+1]] |
-  CREATE (node1)-[:CONNECTED_TO]->(node2))));
-
-
-//
-// Set Track lengths / weights
-//
-MATCH (t1:Track)<-[r1]-(n:Station)-[r:CONNECTED_TO]->(m:Station)-[r2]->(t2:Track) WHERE r1.lat>0 and r2.lat>0 AND id(n)<id(m)
-WITH r, point.distance(r1.geocord, r2.geocord) AS distance
-SET r.length = toInteger(distance)
-RETURN count(r);
-
+FOREACH (node2 in [o_[i+1]] |
+MERGE (node1)-[:CONNECTED_TO]-(node2))));
 
 //
-// OPTIONAL:
-//
-// Renaming OUs to the actual kind of Unit, e.g. switch, stop point, etc.
+// Add labels for Operation Unit types, e.g. like switches, stop point, etc.
+// This is to illustrate how easy we can add new labels. The Cypher can be
+// written much more dense, but then it is harder to understand
 //
 MATCH (ou:OperationUnit)
 WHERE ou.unitKind = "Swch"
@@ -148,31 +175,43 @@ WHERE ou.unitKind = "Trch"
 SET ou:TrackChange
 RETURN count(*);
 
-// Remove Label OperationUnit, since all OUs are now labeled according to their kind
-MATCH (o:OperationUnit)
-REMOVE o:OperationUnit;
-
-// In order to get everything removed point to the Label OperationUnit, remove the index created above
-// Therefore run the command "SHOW INDEXES;" and find the index name for the OperationUnit and shortcut index
-// Then run a "DROP INDEX <name-of-index>;"
+//
+// Calculating distances between stations
+//
+// MATCH path=(h1:Hub)--(h2:Hub)
+// MATCH path2=(h1)--(ou1:Station)--(t:Track)--(ou2:Station)--(h2)
+// RETURN h1.shortcut,h2.shortcut,abs(ou1.kmi-ou2.kmi) as distance, abs(toFloat(replace(trim(split(ou1.kml,'+')[0]),',','.'))-toFloat(replace(trim(split(ou2.kml,'+')[0]),',','.'))) as dist limit 50
 
 //
-// Load all Points of Interest and create relationship to the closest Station near the Point of Interest --> may be the same Geo Coordinates, 
-// in case it is a main city e.g. Berlin, or different Coordinates if the PoI is off in the country side!
-// 
+// Calculating and adding distance property to the CONNECTED_TO relationship
+//
+MATCH path=(h1:Hub)-[r:CONNECTED_TO]-(h2:Hub)
+MATCH path2=(h1)--(ou1:OperationUnit)--(t:Track)--(ou2:OperationUnit)--(h2)
+WITH h1,r,h2,round(100*abs(toFloat(replace(trim(split(ou1.kml,'+')[0]),',','.'))-toFloat(replace(trim(split(ou2.kml,'+')[0]),',','.'))))/100 as dist
+set r.distance=dist;
+
+// just for checking the tracks length
+// MATCH (t:Track) return t.trackShortCut,(toFloat(t.kmendE)-toFloat(t.kmstrE))/10000 as length
+
+//
+// Loading Point of Interest and matching the closest station automtically
+// by finding the closest distance between geo point of the POI and the next
+// available station
+//
 LOAD CSV WITH HEADERS FROM $filenamePOIs AS line FIELDTERMINATOR ';'
-WITH line.SHORTCUT AS shortcut, line.CITY AS city, line.POI_DESCRIPTION AS description, line.LINK_FOTO AS linkFoto, line.LINK_WEBSITE AS linkWeb, line.LAT AS lat, line.LONG AS long, line.SECRET AS secret
-CREATE (po:POI {shortcut: shortcut})
-    SET po.description = description,
-        po.city = city,
-        po.linkWebSite = linkWeb,
-        po.linkFoto = linkFoto,
-        po.long = toFloat(long),
-        po.lat = toFloat(lat),
-        po.geocord = point({latitude: toFloat(lat),longitude: toFloat(long)}),
-        po.secret = toBoolean(secret)
-WITH po.shortcut AS scut
-MATCH (st:Station {shortcut: scut})
-MATCH (po:POI {shortcut: scut})
-CREATE (po)-[:HAS_POI]->(st)
-RETURN count(*);
+WITH line.CITY AS city, line.POI_DESCRIPTION AS description, line.LINK_FOTO AS linkFoto, line.LINK_WEBSITE AS linkWeb, line.LAT AS lat, line.LONG AS long, line.SECRET AS secret
+CREATE (po:POI {geocord:point({latitude: toFloat(lat),longitude: toFloat(long)})})
+SET po.description = description,
+po.city = city, 
+po.linkWebSite = linkWeb,
+po.linkFoto = linkFoto,
+po.long = toFloat(long),
+po.lat = toFloat(lat),
+po.secret = toBoolean(secret)
+WITH *
+MATCH (h:Hub)--(s:Station)
+WITH h,collect(s) as stations,po
+WITH po,apoc.agg.minItems(h,point.distance(h.geocord,po.geocord)).items[0] AS hub
+MERGE (hub)-[:HAS_POI]->(po);
+
+// ==== DONE LOADING ====
