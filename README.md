@@ -16,6 +16,7 @@ The dataset is available in German on the OpenDB website of Deutsche Bahn (DB). 
 - [Original Track/Operational Unit Data](https://data.deutschebahn.com/dataset/)
 
 ---
+## Explaining the data set
 
 #### Tracks
 
@@ -115,7 +116,7 @@ As you can see now in the data model, there is a Hub label and it is connected t
 4. Now you can find certain queries in the `./code` directory in the file called `all_queries.cypher`. Try them out by cutting and pasting them into the Neo4j browser like shown below.
 
 ---
-## Run some Cypher queries
+## Run some Cypher queries on your Graph (database)
 
 Let's start with some simple queries. Copy and Paste them into your Neo4j Browser in order to run them.
 
@@ -129,14 +130,14 @@ Show tracks and limit the number of returned tracks to 10:
 MATCH (t:Track) RETURN t LIMIT 10;
 ```
 
-//Show stations and tracks
+Show stations and tracks:
 ```cypher
 MATCH path=(s:Station)--(t:Track) RETURN path LIMIT 10;
 
 MATCH path=(s:Station)-[:ON_TRACK]->(t:Track) RETURN path LIMIT 10;
 ```
 
-//WHERE clause
+using the WHERE clause in two different way:
 ```cypher
 MATCH (s:Station{shortcut:'BWES'}) RETURN s;
 
@@ -181,7 +182,7 @@ UNWIND nodes(path) AS nodo
 RETURN [(nodo)--(:Station) | nodo] AS nodos;
 ```
 
-#### Graph Data Science (GDS)
+##### Graph Data Science (GDS)
 
 Project a graph named 'Hubs' into memory. We only take the "Hub" Node and the "CONNECTED_TO"
 relationship:
