@@ -101,7 +101,11 @@ The following high level steps are required, to build the demo environment:
 
 2. Open Neo4j Browser and run the load-all-data.cypher script from the code directory above. You can cut & paste the code into the Neo4j Browser command line.
 
-3. After the script has finished loading, you can check your data model. It should look like the following:
+3. After the script has finished loading, you can check your data model. It should look like the following (maybe yours is a bit more mixed up):
+
+<img width="540" alt="Data Model - Digital Twin" src="[https://github.com/neo4j-field/gsummit2023/blob/d6c898d8225b0cb146ba900af947269f17930895/images/dm-simple-verion.png](https://github.com/neo4j-field/gsummit2023/blob/85735d83568d6364ebc0fb0ca59279633ffae409/images/dm-with-all-labels.png)">
+
+If you would hide all labels except the label "OperationUnit" and "Station", you will see the basic data model that looks like this:
 
 <img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/d6c898d8225b0cb146ba900af947269f17930895/images/dm-simple-verion.png">
 
