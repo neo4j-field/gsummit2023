@@ -1,0 +1,497 @@
+{
+  "title": "Graph Summit 2023 - Digital Twin Workshop",
+  "version": "2.2",
+  "settings": {
+    "pagenumber": 1,
+    "editable": true,
+    "fullscreenEnabled": true,
+    "parameters": {
+      "neodash_chapter_cityname": "",
+      "neodash_countrycode": "CH",
+      "neodash_operationpointname_name_1": "ROMA SM.",
+      "neodash_operationpointname_name_1_display": "ROMA SM.",
+      "neodash_station_name_1": "",
+      "neodash_station_name_1_display": "",
+      "neodash_operationpointname_name_2": "München Hbf",
+      "neodash_operationpointname_name_2_display": "München Hbf",
+      "neodash_operationpointname_name_3": "Berlin Hauptbahnhof - Lehrter Bahnhof",
+      "neodash_operationpointname_name_3_display": "Berlin Hauptbahnhof - Lehrter Bahnhof",
+      "neodash_field1": "Speed",
+      "neodash_linkFoto": "https://lp-cms-production.imgix.net/2021-06/GettyRF_543739496.jpg?auto=format&q=75&w=1920",
+      "neodash_speedtime": "traveltime",
+      "neodash_operationpointname_name_4": "Frankfurt (Main) Hbf",
+      "neodash_operationpointname_name_4_display": "Frankfurt (Main) Hbf"
+    },
+    "disableRowLimiting": false
+  },
+  "pages": [
+    {
+      "title": "Graph Summit Digital Twin Overview",
+      "reports": [
+        {
+          "title": "Countries in Graph",
+          "query": "MATCH (op:OperationPoint)\nWITH substring(op.id,0,2) AS Countries\nRETURN DISTINCT Countries ORDER BY Countries;\n\n",
+          "width": 3,
+          "height": 4,
+          "x": 0,
+          "y": 1,
+          "type": "table",
+          "selection": {},
+          "settings": {
+            "actionsRules": [
+              {
+                "condition": "Click",
+                "field": "Countries",
+                "value": "Countries",
+                "customization": "set variable",
+                "customizationValue": "countrycode"
+              }
+            ],
+            "compact": false,
+            "description": "Countries that have data submitted to the EU portal."
+          }
+        },
+        {
+          "title": "Map on Tracks",
+          "query": "MATCH (op:OperationPoint)\nWHERE op.id STARTS WITH $neodash_countrycode\nRETURN op;\n\n\n",
+          "width": 9,
+          "height": 4,
+          "x": 3,
+          "y": 1,
+          "type": "map",
+          "selection": {
+            "OperationPoint": "(no label)",
+            "Junction": "(no label)"
+          },
+          "settings": {
+            "autorun": true,
+            "fullscreenEnabled": true,
+            "defaultRelWidth": 1.5,
+            "defaultNodeSize": "small",
+            "description": "Track in country $neodash_countrycode"
+          }
+        },
+        {
+          "title": "Country Code shown",
+          "query": "RETURN $neodash_countrycode\n\n\n",
+          "width": 3,
+          "height": 1,
+          "x": 0,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "textAlign": "center",
+            "verticalAlign": "middle"
+          }
+        },
+        {
+          "title": "Stations in country $neodash_countrycode",
+          "query": "MATCH(op:OperationPoint)\nWHERE op.id STARTS WITH $neodash_countrycode \nAND labels(op)[1] IN ['Station','SmallStation'] \nRETURN count(op); \n\n\n",
+          "width": 3,
+          "height": 1,
+          "x": 3,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "fontSize": 64,
+            "textAlign": "center",
+            "verticalAlign": "middle"
+          }
+        },
+        {
+          "title": "Switches in country $neodash_countrycode",
+          "query": "MATCH(op:OperationPoint)\nWHERE op.id STARTS WITH $neodash_countrycode \nAND labels(op)[1] IN ['Switch','Junction'] \nRETURN count(op); \n\n\n",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "fontSize": 64,
+            "textAlign": "center",
+            "verticalAlign": "middle"
+          }
+        },
+        {
+          "title": "Stop Points in country $neodash_countrycode",
+          "query": "MATCH(op:OperationPoint)\nWHERE op.id STARTS WITH $neodash_countrycode \nAND labels(op)[1] IN ['PassengerStop','PassengerTerminal'] \nRETURN count(op); \n\n\n",
+          "width": 3,
+          "height": 1,
+          "x": 6,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "fontSize": 64,
+            "textAlign": "center",
+            "verticalAlign": "middle"
+          }
+        },
+        {
+          "title": "",
+          "query": "MATCH(op:OperationPoint)-[:NAMED]->(opn:OperationPointName)\nWHERE op.id STARTS WITH $neodash_countrycode \nAND labels(op)[1] IN ['Station','SmallStation'] \nRETURN opn.name AS Station\n\n\n",
+          "width": 3,
+          "height": 2,
+          "x": 0,
+          "y": 5,
+          "type": "table",
+          "selection": {},
+          "settings": {
+            "nodePositions": {}
+          }
+        }
+      ]
+    },
+    {
+      "title": "Shortest Path Calculations",
+      "reports": [
+        {
+          "title": "Start",
+          "query": "MATCH (n:`OperationPointName`) \nWHERE toLower(toString(n.`name`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`name` as value,  n.`name` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 0,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "type": "Node Property",
+            "entityType": "OperationPointName",
+            "description": "Select a start station",
+            "propertyType": "name",
+            "propertyTypeDisplay": "name",
+            "parameterName": "neodash_operationpointname_name_1",
+            "id": "1"
+          }
+        },
+        {
+          "title": "Destination",
+          "query": "MATCH (n:`OperationPointName`) \nWHERE toLower(toString(n.`name`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`name` as value,  n.`name` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 3,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "type": "Node Property",
+            "entityType": "OperationPointName",
+            "description": "Select a start station",
+            "propertyType": "name",
+            "propertyTypeDisplay": "name",
+            "parameterName": "neodash_operationpointname_name_2",
+            "id": "2",
+            "overridePropertyDisplayName": false,
+            "manualPropertyNameSpecification": true
+          }
+        },
+        {
+          "title": "POIs on your Track",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_1})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_2})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', 'sectionlength') yield path as path\nWITH nodes(path) AS nodeset\nUNWIND nodeset AS nod\nMATCH(nod)-[:HAS_POI]->(p:POI)\nRETURN count(p);",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "fontSize": 64,
+            "actionsRules": [
+              {
+                "condition": "Click",
+                "field": "\"Speed\"",
+                "value": "speed",
+                "customization": "set variable",
+                "customizationValue": "field1"
+              },
+              {
+                "condition": "Click",
+                "field": "\"Length\"",
+                "value": "sectionlength",
+                "customization": "set variable",
+                "customizationValue": "field1"
+              }
+            ],
+            "textAlign": "center",
+            "verticalAlign": "middle"
+          }
+        },
+        {
+          "title": "Shortest Path Track to travel",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_1})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_2})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', 'sectionlength') yield path as path\nRETURN path;\n\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 6,
+          "y": 1,
+          "type": "graph",
+          "selection": {
+            "OperationPoint": "id",
+            "FreightTerminal": "id",
+            "Junction": "id",
+            "PassengerStop": "id",
+            "Switch": "id",
+            "Station": "id",
+            "PassengerTerminal": "id",
+            "SmallStation": "id",
+            "BorderPoint": "id",
+            "DepotOrWorkshop": "id",
+            "PrivateSiding": "id",
+            "ShuntingYard": "id",
+            "TrainTechnicalServices": "id"
+          },
+          "settings": {
+            "nodePositions": {}
+          }
+        },
+        {
+          "title": "Trip Length in km",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_1})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_2})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\n\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', 'sectionlength') yield path as path, weight as weight\nRETURN weight;",
+          "width": 3,
+          "height": 1,
+          "x": 6,
+          "y": 0,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "OperationPointName",
+            "propertyType": "name",
+            "propertyTypeDisplay": "name",
+            "parameterName": "neodash_operationpointname_name_3",
+            "id": "3",
+            "verticalAlign": "middle",
+            "textAlign": "center",
+            "fontSize": 64
+          }
+        },
+        {
+          "title": "Travel Map",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_1})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_2})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', 'sectionlength') yield path as path\nRETURN path;\n\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 0,
+          "y": 1,
+          "type": "map",
+          "selection": {
+            "OperationPoint": "(no label)",
+            "FreightTerminal": "(no label)",
+            "Junction": "(no label)",
+            "PassengerStop": "(no label)",
+            "Switch": "(no label)",
+            "Station": "(no label)",
+            "PassengerTerminal": "(no label)",
+            "SmallStation": "(no label)",
+            "BorderPoint": "(no label)",
+            "DepotOrWorkshop": "(no label)",
+            "PrivateSiding": "(no label)",
+            "ShuntingYard": "(no label)",
+            "TrainTechnicalServices": "(no label)"
+          },
+          "settings": {
+            "nodePositions": {}
+          }
+        },
+        {
+          "title": "POIs on the ride",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_1})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_2})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', 'sectionlength') yield path as path\nWITH nodes(path) AS nodeset\nUNWIND nodeset AS nod\nMATCH(nod)-[:HAS_POI]->(p:POI)\nRETURN p.city AS City, p.description AS Description, p.linkFoto AS Foto;\n\n\n",
+          "width": 4,
+          "height": 4,
+          "x": 0,
+          "y": 4,
+          "type": "table",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "actionsRules": [
+              {
+                "condition": "Click",
+                "field": "City",
+                "value": "Foto",
+                "customization": "set variable",
+                "customizationValue": "linkFoto"
+              }
+            ],
+            "columnWidths": "[0.5,1,0]"
+          }
+        },
+        {
+          "title": "POI Foto",
+          "query": "![image]($neodash_linkFoto)\n\n",
+          "width": 8,
+          "height": 4,
+          "x": 4,
+          "y": 4,
+          "type": "text",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "replaceGlobalParameters": true
+          }
+        }
+      ]
+    },
+    {
+      "title": "Speed vs. Time",
+      "reports": [
+        {
+          "title": "Start",
+          "query": "MATCH (n:`OperationPointName`) \nWHERE toLower(toString(n.`name`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`name` as value,  n.`name` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 0,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "OperationPointName",
+            "propertyType": "name",
+            "propertyTypeDisplay": "name",
+            "parameterName": "neodash_operationpointname_name_3",
+            "id": "3"
+          }
+        },
+        {
+          "title": "Destination",
+          "query": "MATCH (n:`OperationPointName`) \nWHERE toLower(toString(n.`name`)) CONTAINS toLower($input) \nRETURN DISTINCT n.`name` as value,  n.`name` as display ORDER BY size(toString(value)) ASC LIMIT 5",
+          "width": 3,
+          "height": 1,
+          "x": 3,
+          "y": 0,
+          "type": "select",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "type": "Node Property",
+            "entityType": "OperationPointName",
+            "propertyType": "name",
+            "propertyTypeDisplay": "name",
+            "parameterName": "neodash_operationpointname_name_4",
+            "id": "4"
+          }
+        },
+        {
+          "title": "Select Speed OR Time",
+          "query": "RETURN 'sectionlength' AS Shortest, 'traveltime' AS Fastest;\n\n\n",
+          "width": 3,
+          "height": 1,
+          "x": 6,
+          "y": 0,
+          "type": "table",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "actionsRules": [
+              {
+                "condition": "Click",
+                "field": "Fastest",
+                "value": "Fastest",
+                "customization": "set variable",
+                "customizationValue": "speedtime"
+              },
+              {
+                "condition": "Click",
+                "field": "Shortest",
+                "value": "Shortest",
+                "customization": "set variable",
+                "customizationValue": "speedtime"
+              }
+            ]
+          }
+        },
+        {
+          "title": "Calculation done for ",
+          "query": "# Calculation done on:\n# $neodash_speedtime\n",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 0,
+          "type": "text",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "replaceGlobalParameters": true
+          }
+        },
+        {
+          "title": "Travel by $neodash_speedtime",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_3})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_4})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', $neodash_speedtime) yield path as path\nRETURN path;\n\n\n",
+          "width": 9,
+          "height": 4,
+          "x": 0,
+          "y": 1,
+          "type": "map",
+          "selection": {
+            "OperationPoint": "(no label)",
+            "Station": "(no label)",
+            "Switch": "(no label)",
+            "PassengerStop": "(no label)",
+            "Junction": "(no label)"
+          },
+          "settings": {
+            "nodePositions": {},
+            "defaultNodeSize": "small",
+            "description": "Track of your journey"
+          }
+        },
+        {
+          "title": "Travel Distance (km)",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_3})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_4})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', $neodash_speedtime) yield path as path, weight as weight\nWITH relationships(path) AS rels\nUNWIND rels AS rel\nRETURN sum(rel.sectionlength);\n\n\n",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 1,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "fontSize": 64,
+            "textAlign": "center",
+            "verticalAlign": "middle"
+          }
+        },
+        {
+          "title": "Travel Time (h)",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_3})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_4})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', $neodash_speedtime) yield path as path, weight as weight\nWITH relationships(path) AS rels\nUNWIND rels AS rel\nRETURN sum(rel.traveltime)/3600;\n\n\n",
+          "width": 3,
+          "height": 1,
+          "x": 9,
+          "y": 2,
+          "type": "value",
+          "selection": {},
+          "settings": {
+            "nodePositions": {},
+            "fontSize": 64,
+            "textAlign": "center",
+            "verticalAlign": "middle"
+          }
+        },
+        {
+          "title": "",
+          "query": "\n\n\n",
+          "width": 3,
+          "height": 2,
+          "x": 9,
+          "y": 3,
+          "type": "text",
+          "selection": {},
+          "settings": {
+            "nodePositions": {}
+          }
+        }
+      ]
+    }
+  ],
+  "parameters": {},
+  "extensions": {
+    "advanced-charts": true,
+    "styling": true,
+    "actions": true
+  }
+}
