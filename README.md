@@ -1,6 +1,6 @@
 # Graph Summit 2023 EMEA - Workshop Digital Twin (work in progress!)
 
-This repository contains the workshop material used during the **Graph Summit 2023 Workshops**. All code, data, dashboards, Bloom perspectives and slides are available for dowload.
+This repository contains the workshop material used during the **Graph Summit 2023 - Building a Graph Solution Workshop**. All code, data, dashboards, Bloom perspectives and slides are available for dowload and free to use.
 
 The aim of the workshop was, to provide a structure way of build a small mini digital twin knowledge graph. It is supposed to answer some basic questions coming from the business and discusses futher, how such digital twin graph could be extended for more insights and business values.
 
@@ -109,6 +109,7 @@ MATCH (op:OperationPoint {id:'SECst'}) RETURN op;
 
 MATCH (op:OperationPoint) WHERE op.id='SECst' RETURN op;
 ```
+You can start exploring the graph in Neo4j Browser by clicking on the returned node and then clicking on the graph symbol to extend the node and see attached nodes. Go for a couple of sections and see, where it goes to.
 
 Profile and explain some of the queries to see their execution plans:
 ```cypher
@@ -149,9 +150,9 @@ MERGE (op1)-[:SECTION {sectionlength: point.distance(op1.geolocation, op2.geoloc
 What you will also recognize is, that there are parts not connected to the railway network. That might be privately used OPs and sections or it also could be an issue of missing data in the data sets of that particular country. This is a way to find them:
 
 ```cypher
-// Find not connected parts for Czech Republic
+// Find not connected parts for Denmark --> Also try other coutries like DE, FR, IT and so on.
 MATCH path=(a:OperationPoint WHERE NOT EXISTS{(a)-[:SECTION]-()})
-WHERE a.id STARTS WITH 'CZ'
+WHERE a.id STARTS WITH 'DK'
 RETURN path;
 
 // or inside the complete dataset
