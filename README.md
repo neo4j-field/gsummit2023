@@ -4,7 +4,7 @@ This repository contains the workshop material used during the **Graph Summit 20
 
 The aim of the workshop was, to provide a structure way of build a small mini digital twin knowledge graph. It is supposed to answer some basic questions coming from the business and discusses futher, how such digital twin graph could be extended for more insights and business values.
 
-The workshop was build with "Graphistas" in mind new to the Graph Database / Analytics arena or Graphistas with a foundational knowledge of Graph databases and Graph Analytics search for another nice example of the value of graph. 
+The workshop was build with "Graphistas" in mind new to the Graph Database / Analytics arena or "Graphistas" with a foundational knowledge of Graph databases and Graph Analytics searching for another nice example of the value of graph. 
 It provides a playground for further experiments or can be used to "advertise" the value of Neo4j Graph Data Platform inside your company or government agency. Thanks for trying it out!
 
 #### About the data that is been used
