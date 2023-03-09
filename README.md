@@ -6,59 +6,47 @@ The aim of the workshop was, to provide a structure way of build a small mini di
 
 #### About the data that is been used
 
-The datasets used here, describes a network of railroad tracks and places (so called operational units) 
+The datasets used here, describes a network of railroad tracks and places (so called operation popints) 
 connected to those tracks. Operational units can be a variaty of places like a Station, a Switch, etc., see the list below.
 
 The dataset is essentailly a digital twin of the existing rail network.
 
 The dataset is available in German on the OpenDB website of Deutsche Bahn (DB). We have renamed most headers, places, some city names, etc. into english names to make if more accessible for a broader audience. For the the workshop use the data from the directory above, **NOT** the orginal data from:
 
-- [Original Track/Operational Unit Data](https://data.deutschebahn.com/dataset/)
+- [Original Track/Operation Point Data](https://data-interop.era.europa.eu/search) comes from the European Union Agency for Railways.
 
 ---
 ## Explaining the data set
 
-#### Tracks
+#### Sections
 
-Tracks have a Track Number (and a Name, too) and they can cover longer distances, many places
-(Operational Units) are on their way.
+Sections are parts of the railway network and have a start and end point. Start and end points are operational points of various types like Stations, Switches, Junktions, etc.
 
-Think of it like an Highway, which has a name, and covers a long distance, passing many freeway
-ramps, parking place, food areas, etc. belonging to different cities.
+The Sections have the following interesting **Properties**:
 
-Tracks have the following interesting **Properties**:
+- source: start OP for this section
+- target: end OP for this section
+- sectionlength: the length in km of that section
+- trackspeed: max speed allowed on that section
 
-- TRACK_NUM: the internal number
-- KMSTR_E: an internal starting point (in km) on the one imagined abstract railroad.
-- KMEND_E: the internal ending point on said imagined abstract railroad
-- SHORTCUT: a short name
-- TRACKNAME: is the name of the track correcponding to the shortcut
+#### Operation Points
 
-#### Operational Units
+Operational Points are connecting the different sections and can be of various types. Some of which are Stations, Small Stations, Passenger Stops, Switches, Junctions and some more.
 
-Following our image of an Highway, Operational Units (OUs) are like freeway ramps. They are connected to
-a specific track. Because the tracks in cities are quite close together, we can group OUs
-with the same shortname together, thinking of the group as a train station, or a place (City).
+Operation Points have the following **Properties:**
 
-Operational units have the following **Properties:**
+- id: the internal number of the OP
+- extralabel: the kind of OP we deal with, e.g. Station, Junction, Switch, etc.
+- name: the name of a OP
+- latitude: of the OP
+- longtitude: of the OU
 
-- TRACK_NUM: the internal number of the Track the OU is on
-- DIRECTION: the direction it is on (maybe right side or left side of the track), not important so
-  far
-- DESCRIPTION: the longer name of a OU
-- UNIT_KIND: the type of the OU. See belows list for more information of the meaning of the abbreviations
-- SHORTCUT: the short, non-unique name of the OU, can be used for grouping
-- LAT: latitude
-- LONG: longitude
-- KM_I: Internal reference point for the OU
+Other data is available from the EU portal, but not used in this workshop.
 
-Other data is imported, but not used in this demo.
-
-#### Point of Interests
+#### Point of Interests (POI)
 
 POIs are distributed through the country and refer to either a main station (and so to a city), or to a station that is closest by the POI. Reason is, that some POIs are in the country side and there is no station close by. POIs have the following interesting **Properties**:
 
-- SHORTCUT: Shortcut of the station at the POI or close by
 - CITY: City name at or close to the POI
 - POI_DESCRIPTION: A short description of the POI
 - LINK_FOTO: A URL to a POI Foto
@@ -68,28 +56,6 @@ POIs are distributed through the country and refer to either a main station (and
 - SECRET: Is the a well know POI (False) or more a secret place (True)
 
 
-#### List describing the kind of Operational Units (OUs)
-
-The data set contains different operational Units, whereas an OU can be from different types. The following is an incomplete list of all OUs covering most of them:
-
-**Shortcut explanation:**
-
-- Station = "St"
-- Switch = "Swch"
-- StopPoint = "Sp"
-- BorderPoint = "Bp"
-- StationSwitch = "St Swch"
-- Reroute = "Rerout"
-- StationPart = "Stp"
-- StationPartSwitch = "Stp Swch"
-- Bridge = "Cro"
-- StopPointBridge = "Sp Cro"
-- StationOutofService = "St o.S." --> Switches out of Service, etc. also available
-- ConnectionPoint = "CoPt"
-- StopPointBlockPoint = "Hp Bk"
-- BlockPoint = "Bk"
-- Track Change = "Trch"
-
 ---
 
 
@@ -98,20 +64,20 @@ The data set contains different operational Units, whereas an OU can be from dif
 The following high level steps are required, to build the demo environment:
 
 1. Download and install [Neo4j Desktop](https://neo4j.com/download-center/). Since we use some Graph Data Science Algorithms during the demo, we require the **GDS Library** to be installed. **Installation instruction** can be found [here](https://neo4j.com/docs/desktop-manual/current/).
-- As an alternative, you can run an [Neo4j Sandbox for Data Scientists](https://sandbox.neo4j.com/?ref=neo4j-home-hero&persona=data-scientist) from (https://sandbox.neo4j.com/ and use an "Blank Sandbox"
+- As an alternative, you can run an [Neo4j Sandbox for Data Scientists](https://sandbox.neo4j.com/?ref=neo4j-home-hero&persona=data-scientist) from (https://sandbox.neo4j.com/ and use an "Blank Sandbox" as shown in the slides.
 
-2. Open Neo4j Browser and run the load-all-data.cypher script from the code directory above. You can cut & paste the code into the Neo4j Browser command line.
+2. Open Neo4j Browser and run the load-all-data.cypher script from the code directory above. You can cut & paste the complete code into the Neo4j Browser command line.
 
 3. After the script has finished loading, you can check your data model. It should look like the following (maybe yours is a bit more mixed up):
 
-<img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/85735d83568d6364ebc0fb0ca59279633ffae409/images/dm-with-all-labels.png">
+<img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/">
 
-If you would hide all labels except the label "OperationUnit" and "Station", you will see the basic data model that looks like this:
+If you would hide all labels except the label "OperationPoint" and "OperationPointName" and "POI", you will see the basic data model that looks like this:
 
-<img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/d6c898d8225b0cb146ba900af947269f17930895/images/dm-simple-verion.png">
+<img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/">
 
 
-As you can see now in the data model, there is a Hub label and it is connected to itself with a CONNECTED_TO relationship. This means, hubs are connected together and make up the tack network (as in the real world). A station (or other Operation Units like Switches, Stop Points, etc.) are ON_TRACK, too. Which essentially means, along a certain track.
+As you can see now in the data model, there is a OperationPoint label and it is connected to itself with a SECTION relationship. This means, OperationPoints are connected together and make up the tack network (as in the real world). A station (or other Operation Units like Switches, Passenger Stop, etc.) are connected as a separate node by the "NAMED" relationship.
 
 4. Now you can find certain queries in the `./code` directory in the file called `all_queries.cypher`. Try them out by cutting and pasting them into the Neo4j browser like shown below.
 
@@ -120,28 +86,28 @@ As you can see now in the data model, there is a Hub label and it is connected t
 
 Let's start with some simple queries. Copy and Paste them into your Neo4j Browser in order to run them.
 
-Show stations and limit the number of returned stations to 10:
+Show Operation Point Names and limit the number of returned OPs to 10:
 ```cypher
-MATCH (s:Station) RETURN s LIMIT 10;
+MATCH (op:OperationPointName) RETURN op LIMIT 10;
 ```
 
-Show tracks and limit the number of returned tracks to 10:
+Show OPs and limit the number of returned tracks to 50:
 ```cypher
-MATCH (t:Track) RETURN t LIMIT 10;
+MATCH (op:OperationPoint) RETURN op LIMIT 50;
 ```
 
-Show stations and tracks:
+Show OperationPoints and Sections, have a look how those two queries defer!
 ```cypher
-MATCH path=(s:Station)--(t:Track) RETURN path LIMIT 10;
+MATCH path=(:OperationPoint)--(:OperationPoint) RETURN path LIMIT 100;
 
-MATCH path=(s:Station)-[:ON_TRACK]->(t:Track) RETURN path LIMIT 10;
+MATCH path=(:OperationPoint)-[:SECTION]->(:OperationPoint) RETURN path LIMIT 100;
 ```
 
 using the WHERE clause in two different way:
 ```cypher
-MATCH (s:Station{shortcut:'BWES'}) RETURN s;
+MATCH (op:OperationPoint {id:'BWES'}) RETURN op;
 
-MATCH (s:Station) WHERE s.shortcut='BWES' RETURN s;
+MATCH (op:OperationPoint) WHERE op.id='BWES' RETURN op;
 ```
 
 Profile and explain some of the queries to see their execution plans:
