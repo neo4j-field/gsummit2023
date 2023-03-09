@@ -6,12 +6,12 @@ The aim of the workshop was, to provide a structure way of build a small mini di
 
 #### About the data that is been used
 
-The datasets used here, describes a network of railroad tracks and places (so called operation popints) 
-connected to those tracks. Operational units can be a variaty of places like a Station, a Switch, etc., see the list below.
+The datasets used here, describes a network of railroad tracks and places (so called operation points) 
+connected to those tracks (called sections here). Operation Points can be a variaty of places like a Stations, a Switches, etc., see more examples below.
 
-The dataset is essentailly a digital twin of the existing rail network.
+The dataset is essentailly a "small" digital twin of the existing rail network in the EU countries.
 
-The dataset is available in German on the OpenDB website of Deutsche Bahn (DB). We have renamed most headers, places, some city names, etc. into english names to make if more accessible for a broader audience. For the the workshop use the data from the directory above, **NOT** the orginal data from:
+The dataset is freely available on the portal of the *European Union Agency for Railways and can be downloaded from their webpage. It offers many more parameters, e.g. type of power source and many more. We are not using all available parameters in this workshop, to keep it's complexity low. Data download is available in different formats e.g. xml or XLMS and we had to convert them into CSV to make loading more comfortable with cypher statements.
 
 - [Original Track/Operation Point Data](https://data-interop.era.europa.eu/search) comes from the European Union Agency for Railways.
 
@@ -20,9 +20,9 @@ The dataset is available in German on the OpenDB website of Deutsche Bahn (DB). 
 
 #### Sections
 
-Sections are parts of the railway network and have a start and end point. Start and end points are operational points of various types like Stations, Switches, Junktions, etc.
+Sections are parts of the railway network and have a start and end point. Start and end points are operational points of various types like Stations, Switches, Junctions, etc.
 
-The Sections have the following interesting **Properties**:
+The Sections have the following interesting **Properties** loaded to the Graph:
 
 - source: start OP for this section
 - target: end OP for this section
@@ -33,19 +33,19 @@ The Sections have the following interesting **Properties**:
 
 Operational Points are connecting the different sections and can be of various types. Some of which are Stations, Small Stations, Passenger Stops, Switches, Junctions and some more.
 
-Operation Points have the following **Properties:**
+Operation Points have the following **Properties** loaded to the Graph:
 
 - id: the internal number of the OP
 - extralabel: the kind of OP we deal with, e.g. Station, Junction, Switch, etc.
-- name: the name of a OP
+- name: the name of an OP
 - latitude: of the OP
 - longtitude: of the OP
 
-Other data is available from the EU portal, but not used in this workshop.
+Other data is available from the EU portal, but not used in this workshop as mentioned above.
 
 #### Point of Interests (POI)
 
-POIs are distributed through the country and refer to either a main station (and so to a city), or to a station that is closest by the POI. Reason is, that some POIs are in the country side and there is no station close by. POIs have the following interesting **Properties**:
+POIs are distributed through the countries and refer to either a main station (and so to a city), or to a station that is closest by the POI. Reason is, that some POIs are in the country side and there is no station close by. POIs have the following interesting **Properties** loaded to the Graph:
 
 - CITY: City name at or close to the POI
 - POI_DESCRIPTION: A short description of the POI
@@ -55,20 +55,21 @@ POIs are distributed through the country and refer to either a main station (and
 - LONG: Longditude of the POI
 - SECRET: Is the a well know POI (False) or more a secret place (True)
 
+NOTE: POIs are not taken from the EU Railway Agency portal, but manually curated as an additional fun factor of the workshop.
 
 ---
 
 
 ## Building the demo environment
 
-The following high level steps are required, to build the demo environment:
+The following high level steps are required, to build the demo environment (will be shown in the workshop):
 
 1. Download and install [Neo4j Desktop](https://neo4j.com/download-center/). Since we use some Graph Data Science Algorithms during the demo, we require the **GDS Library** to be installed. **Installation instruction** can be found [here](https://neo4j.com/docs/desktop-manual/current/).
 - As an alternative, you can run an [Neo4j Sandbox for Data Scientists](https://sandbox.neo4j.com/?ref=neo4j-home-hero&persona=data-scientist) from (https://sandbox.neo4j.com/ and use an "Blank Sandbox" as shown in the slides.
 
 2. Open Neo4j Browser and run the load-all-data.cypher script from the code directory above. You can cut & paste the complete code into the Neo4j Browser command line.
 
-3. After the script has finished loading, you can check your data model. It should look like the following (maybe yours is a bit more mixed up):
+3. After the script has finished loading, you can check your data model. Run the command ```CALL db.schema.virtualization```in your Browser console. It should look like the following (maybe yours is a bit more mixed up):
 
 <img width="800" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/791e76740b212686b73230a1cdca851b643bfbe1/images/data-model-all_labels.png">
 
@@ -76,10 +77,9 @@ If you would hide all labels except the label "OperationPoint" and "OperationPoi
 
 <img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/68b41bce4c3ecdd8c73da58f55b7c34790907f4d/images/data-model-with-poi.png">
 
+As you can see now in the data model, there is a OperationPoint label and it is connected to itself with a SECTION relationship. This means, OperationPoints are connected together and make up the track network (as in the real world). A station (or other Operation Units like Switches, Passenger Stop, etc.) are connected as a separate node by the "NAMED" relationship that represents their name, etc..
 
-As you can see now in the data model, there is a OperationPoint label and it is connected to itself with a SECTION relationship. This means, OperationPoints are connected together and make up the tack network (as in the real world). A station (or other Operation Units like Switches, Passenger Stop, etc.) are connected as a separate node by the "NAMED" relationship.
-
-4. Now you can find certain queries in the `./code` directory in the file called `all_queries.cypher`. Try them out by cutting and pasting them into the Neo4j browser like shown below.
+4. Now you can find certain queries in the `./code` directory in the file called `all_queries.cypher` or if you keep on reading. Try them out by cutting and pasting them into the Neo4j browser like shown below. We will also do that in the workshop!
 
 ---
 ## Run some Cypher queries on your Graph (database)
@@ -121,7 +121,6 @@ EXPLAIN MATCH (op:OperationPoint  {id:'DE000BL'}) RETURN op;
 
 EXPLAIN MATCH (op:OperationPoint) WHERE op.id='DE000BL' RETURN op;
 ```
-
 
 ## Fixing some gaps
 
@@ -173,6 +172,7 @@ WITH r, r.speed * (1000.0/3600.0) as speed_ms
 SET r.traveltime = r.sectionlength / speed_ms
 RETURN count(*);
 ```
+**IMPORTANT** the above query needs to run for the NeoDash Dashboard to run entirely!
 
 
 ### Shortest Path Queries using different Shortest Path functions in Neo4j
