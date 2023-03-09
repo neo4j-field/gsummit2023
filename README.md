@@ -70,11 +70,11 @@ The following high level steps are required, to build the demo environment:
 
 3. After the script has finished loading, you can check your data model. It should look like the following (maybe yours is a bit more mixed up):
 
-<img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/791e76740b212686b73230a1cdca851b643bfbe1/images/data-model-all_labels.png">
+<img width="800" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/791e76740b212686b73230a1cdca851b643bfbe1/images/data-model-all_labels.png">
 
 If you would hide all labels except the label "OperationPoint" and "OperationPointName" and "POI", you will see the basic data model that looks like this:
 
-<img width="200" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/791e76740b212686b73230a1cdca851b643bfbe1/images/data-model-foundation.png">
+<img width="100" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/791e76740b212686b73230a1cdca851b643bfbe1/images/data-model-foundation.png">
 
 
 As you can see now in the data model, there is a OperationPoint label and it is connected to itself with a SECTION relationship. This means, OperationPoints are connected together and make up the tack network (as in the real world). A station (or other Operation Units like Switches, Passenger Stop, etc.) are connected as a separate node by the "NAMED" relationship.
