@@ -1,4 +1,4 @@
-# NeoDash Example Dashboard for Graph Summit 2023 Digital Twin Workshop
+### NeoDash Example Dashboard for Graph Summit 2023 Digital Twin Workshop
 
 The Dashboard save as JSON export from [NeoDash](https://neo4j.com/labs/neodash/) can imported into NeoDash via the "Load Dashboard" button.
 
