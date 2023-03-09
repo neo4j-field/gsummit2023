@@ -39,7 +39,7 @@ Operation Points have the following **Properties:**
 - extralabel: the kind of OP we deal with, e.g. Station, Junction, Switch, etc.
 - name: the name of a OP
 - latitude: of the OP
-- longtitude: of the OU
+- longtitude: of the OP
 
 Other data is available from the EU portal, but not used in this workshop.
 
@@ -105,30 +105,30 @@ MATCH path=(:OperationPoint)-[:SECTION]->(:OperationPoint) RETURN path LIMIT 100
 
 using the WHERE clause in two different way:
 ```cypher
-MATCH (op:OperationPoint {id:'BWES'}) RETURN op;
+MATCH (op:OperationPoint {id:'SECst'}) RETURN op;
 
-MATCH (op:OperationPoint) WHERE op.id='BWES' RETURN op;
+MATCH (op:OperationPoint) WHERE op.id='SECst' RETURN op;
 ```
 
 Profile and explain some of the queries to see their execution plans:
 ```cypher
-PROFILE MATCH (s:Station{shortcut:'BWES'}) RETURN s;
+PROFILE MATCH (op:OperationPoint{id:'DE000BL'}) RETURN op;
 
-PROFILE MATCH (s:Station) WHERE s.shortcut='BWES' RETURN s;
+PROFILE MATCH (op:OperationPoint) WHERE op.id='DE000BL' RETURN op;
 
-EXPLAIN MATCH (s:Station{shortcut:'BWES'}) RETURN s;
+EXPLAIN MATCH (op:OperationPoint  {id:'DE000BL'}) RETURN op;
 
-EXPLAIN MATCH (s:Station) WHERE s.shortcut='BWES' RETURN s;
+EXPLAIN MATCH (op:OperationPoint) WHERE op.id='DE000BL' RETURN op;
 ```
 
 Assets in Track where Berlin-Westend station is:
 ```cypher
-MATCH (h:Hub)-[r]-(s:Station{shortcut:'BWES'})-[i:ON_TRACK]-(t:Track)-[has]-(a) RETURN *;
+MATCH (h:Hub)-[r]-(s:Station{shortcut:'SECst'})-[i:ON_TRACK]-(t:Track)-[has]-(a) RETURN *;
 ```
 
 Stop points on the track where Berlin-Westend station is:
 ```cypher
-MATCH (h:Hub)-[r]-(s:Station{shortcut:'BWES'})-[i:ON_TRACK]-(t:Track)-[has]-(a:StopPoint) RETURN *;
+MATCH (h:Hub)-[r]-(s:Station{shortcut:'SECst'})-[i:ON_TRACK]-(t:Track)-[has]-(a:StopPoint) RETURN *;
 ```
 
 Above queries can be assigned to variable path!
