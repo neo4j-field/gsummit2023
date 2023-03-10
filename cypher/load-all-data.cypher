@@ -1,3 +1,5 @@
+MATCH(o) DETACH DELETE o; // Cleaning up from a previous attempt
+
 :param OpPointsDir => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/nodes';
 :param TrackPointDir => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/relationships';
 // Point of Interest Data
