@@ -106,7 +106,7 @@ MATCH (source:OperationPoint WHERE source.id = row.source)
 MATCH (target:OperationPoint WHERE target.id = row.target)
 MERGE (source)-[:SECTION {sectionlength: toFloat(row.sectionlength)}]->(target);
 
-LOAD CSV WITH HEADERS FROM $TrackPointDir + "/SECTION_UK.csv" as row
+LOAD CSV WITH HEADERS FROM $TrackPointDir + "/SECTION_UK.csv" as row FIELDTERMINATOR ";"
 MATCH (source:OperationPoint WHERE source.id = row.source)
 MATCH (target:OperationPoint WHERE target.id = row.target)
 MERGE (source)-[:SECTION {sectionlength: toFloat(row.sectionlength)}]->(target);
@@ -162,7 +162,7 @@ MATCH (op:OperationPoint WHERE op.id = row.id)
 CALL apoc.create.addLabels( id(op), [ row.extralabel ] ) YIELD node
 RETURN count(*);
 
-LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row
+LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row FIELDTERMINATOR ";"
 MATCH (op:OperationPoint WHERE op.id = row.id)
 CALL apoc.create.addLabels( id(op), [ row.extralabel ] ) YIELD node
 RETURN count(*);
