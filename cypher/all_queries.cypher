@@ -30,12 +30,20 @@ EXPLAIN MATCH (op:OperationPoint) WHERE op.id='DE000BL' RETURN op;
 MATCH sg=(op1 WHERE op1.id STARTS WITH 'DE')-[:SECTION]-(op2 WHERE op2.id STARTS WITH 'EU')
 MATCH (op3 WHERE op3.id STARTS WITH 'DK')
 WITH op2, op3, point.distance(op3.geolocation, op2.geolocation) as distance
-ORDER by distance LIMIT 
+ORDER by distance LIMIT 1
 MERGE (op3)-[:SECTION {sectionlength: distance/1000.0, fix: true}]->(op2);
 
 // DK00200 - Nyborg gap
-MATCH sg=(op1:OperationPoint WHERE op1.id = 'DK00200'),(op2:OperationPoint)-[:NAMED]->(opn:OperationPointName WHEE opn.name = "Nyborg")
+MATCH sg=(op1:OperationPoint WHERE op1.id = 'DK00200'),(op2:OperationPoint)-[:NAMED]->(opn:OperationPointName WHERE opn.name = "Nyborg")
 MERGE (op1)-[:SECTION {sectionlength: point.distance(op1.geolocation, op2.geolocation)/1000.0, fix: true}]->(op2);
+
+// EU00228 - FR0000016210 through the channel
+MATCH sg=(op1 WHERE op1.id STARTS WITH 'UK')-[:SECTION]-(op2 WHERE op2.id STARTS WITH 'EU')
+MATCH (op3 WHERE op3.id STARTS WITH 'FR')
+WITH op2, op3, point.distance(op3.geolocation, op2.geolocation) as distance
+ORDER by distance LIMIT 1
+MERGE (op3)-[:SECTION {sectionlength: distance/1000.0, fix: true}]->(op2);
+
 
 // Find not connected parts for Denmark --> Also try other coutries like DE, FR, IT and so on.
 MATCH path=(a:OperationPoint WHERE NOT EXISTS{(a)-[:SECTION]-()})
