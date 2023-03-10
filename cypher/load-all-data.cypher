@@ -49,6 +49,10 @@ LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_NL.csv" as row
 MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
 CREATE (op)-[:NAMED {country: "NL"}]->(:OperationPointName {name: row.name});
 
+LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row
+MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+CREATE (op)-[:NAMED {country: "NL"}]->(:OperationPointName {name: row.name});
+
 //
 // Chaining up sections
 //
@@ -98,6 +102,11 @@ MATCH (target:OperationPoint WHERE target.id = row.target)
 MERGE (source)-[:SECTION {sectionlength: toFloat(row.sectionlength)}]->(target);
 
 LOAD CSV WITH HEADERS FROM $TrackPointDir + "/SECTION_NL.csv" as row
+MATCH (source:OperationPoint WHERE source.id = row.source)
+MATCH (target:OperationPoint WHERE target.id = row.target)
+MERGE (source)-[:SECTION {sectionlength: toFloat(row.sectionlength)}]->(target);
+
+LOAD CSV WITH HEADERS FROM $TrackPointDir + "/SECTION_UK.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)
 MATCH (target:OperationPoint WHERE target.id = row.target)
 MERGE (source)-[:SECTION {sectionlength: toFloat(row.sectionlength)}]->(target);
@@ -153,6 +162,11 @@ MATCH (op:OperationPoint WHERE op.id = row.id)
 CALL apoc.create.addLabels( id(op), [ row.extralabel ] ) YIELD node
 RETURN count(*);
 
+LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row
+MATCH (op:OperationPoint WHERE op.id = row.id)
+CALL apoc.create.addLabels( id(op), [ row.extralabel ] ) YIELD node
+RETURN count(*);
+
 //
 // Load Speed Data
 //
@@ -193,6 +207,10 @@ MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:
 SET s.speed = toFloat(row.trackspeed);
 
 LOAD CSV WITH HEADERS FROM $TrackPointDir + "/SECTION_NL_speed.csv" as row
+MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
+SET s.speed = toFloat(row.trackspeed);
+
+LOAD CSV WITH HEADERS FROM $TrackPointDir + "/SECTION_UK_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
 SET s.speed = toFloat(row.trackspeed);
 
