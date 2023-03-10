@@ -236,6 +236,6 @@ MATCH (h:OperationPoint)--(s:Station)
 WITH h,collect(s) as stations, po
 WITH po,apoc.agg.minItems(h,point.distance(h.geolocation,po.geolocation)).items[0] AS hub
 MERGE (s)-[:HAS_POI]->(po)
-RETURN count(h);
+RETURN count(po);
 
 // ==== DONE LOADING ====
