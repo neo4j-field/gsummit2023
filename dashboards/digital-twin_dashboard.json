@@ -7,9 +7,9 @@
     "fullscreenEnabled": true,
     "parameters": {
       "neodash_chapter_cityname": "",
-      "neodash_countrycode": "CH",
-      "neodash_operationpointname_name_1": "ROMA SM.",
-      "neodash_operationpointname_name_1_display": "ROMA SM.",
+      "neodash_countrycode": "UK",
+      "neodash_operationpointname_name_1": "Berlin Hauptbahnhof - Lehrter Bahnhof",
+      "neodash_operationpointname_name_1_display": "Berlin Hauptbahnhof - Lehrter Bahnhof",
       "neodash_station_name_1": "",
       "neodash_station_name_1_display": "",
       "neodash_operationpointname_name_2": "München Hbf",
@@ -17,10 +17,10 @@
       "neodash_operationpointname_name_3": "Berlin Hauptbahnhof - Lehrter Bahnhof",
       "neodash_operationpointname_name_3_display": "Berlin Hauptbahnhof - Lehrter Bahnhof",
       "neodash_field1": "Speed",
-      "neodash_linkFoto": "https://lp-cms-production.imgix.net/2021-06/GettyRF_543739496.jpg?auto=format&q=75&w=1920",
+      "neodash_linkFoto": "https://image.jimcdn.com/app/cms/image/transf/none/path/sa6549607c78f5c11/image/i781101d80fd2cd46/version/1606400444/best-hidden-gems-in-germany-bamberg-copyright-feel-good-studio-european-best-destinations.jpg",
       "neodash_speedtime": "traveltime",
-      "neodash_operationpointname_name_4": "Frankfurt (Main) Hbf",
-      "neodash_operationpointname_name_4_display": "Frankfurt (Main) Hbf"
+      "neodash_operationpointname_name_4": "Bruxelles-Midi | Brussel-Zuid",
+      "neodash_operationpointname_name_4_display": "Bruxelles-Midi | Brussel-Zuid"
     },
     "disableRowLimiting": false
   },
@@ -61,7 +61,14 @@
           "type": "map",
           "selection": {
             "OperationPoint": "(no label)",
-            "Junction": "(no label)"
+            "BorderPoint": "(no label)",
+            "SmallStation": "(no label)",
+            "Junction": "(no label)",
+            "passenger terminal": "(no label)",
+            "Station": "(no label)",
+            "Switch": "(no label)",
+            "DepotOrWorkshop": "(no label)",
+            "TrainTechnicalServices": "(no label)"
           },
           "settings": {
             "autorun": true,
@@ -230,18 +237,10 @@
           "type": "graph",
           "selection": {
             "OperationPoint": "id",
-            "FreightTerminal": "id",
-            "Junction": "id",
+            "Station": "id",
             "PassengerStop": "id",
             "Switch": "id",
-            "Station": "id",
-            "PassengerTerminal": "id",
-            "SmallStation": "id",
-            "BorderPoint": "id",
-            "DepotOrWorkshop": "id",
-            "PrivateSiding": "id",
-            "ShuntingYard": "id",
-            "TrainTechnicalServices": "id"
+            "Junction": "id"
           },
           "settings": {
             "nodePositions": {}
@@ -279,18 +278,10 @@
           "type": "map",
           "selection": {
             "OperationPoint": "(no label)",
-            "FreightTerminal": "(no label)",
-            "Junction": "(no label)",
+            "Station": "(no label)",
             "PassengerStop": "(no label)",
             "Switch": "(no label)",
-            "Station": "(no label)",
-            "PassengerTerminal": "(no label)",
-            "SmallStation": "(no label)",
-            "BorderPoint": "(no label)",
-            "DepotOrWorkshop": "(no label)",
-            "PrivateSiding": "(no label)",
-            "ShuntingYard": "(no label)",
-            "TrainTechnicalServices": "(no label)"
+            "Junction": "(no label)"
           },
           "settings": {
             "nodePositions": {}
@@ -298,7 +289,7 @@
         },
         {
           "title": "POIs on the ride",
-          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_1})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_2})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', 'sectionlength') yield path as path\nWITH nodes(path) AS nodeset\nUNWIND nodeset AS nod\nMATCH(nod)-[:HAS_POI]->(p:POI)\nRETURN p.city AS City, p.description AS Description, p.linkFoto AS Foto;\n\n\n",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_1})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_2})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', 'sectionlength') yield path as path\nWITH nodes(path) AS nodeset\nUNWIND nodeset AS nod\nMATCH(nod)-[:IS_NEAR]->(p:POI)\nRETURN p.city AS City, p.description AS Description, p.linkFoto AS Foto;\n\n\n",
           "width": 4,
           "height": 4,
           "x": 0,
@@ -432,7 +423,10 @@
             "Station": "(no label)",
             "Switch": "(no label)",
             "PassengerStop": "(no label)",
-            "Junction": "(no label)"
+            "Junction": "(no label)",
+            "TechnicalChange": "(no label)",
+            "BorderPoint": "(no label)",
+            "SmallStation": "(no label)"
           },
           "settings": {
             "nodePositions": {},
