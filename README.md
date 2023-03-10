@@ -149,6 +149,13 @@ MATCH sg=(op1:OperationPoint WHERE op1.id = 'DK00200'),(op2:OperationPoint)-[:NA
 MERGE (op1)-[:SECTION {sectionlength: point.distance(op1.geolocation, op2.geolocation)/1000.0, fix: true}]->(op2);
 ```
 
+And also connect the UK via the channel:
+```cypher
+// FR0000016210 - UKB1014 through the channel
+MATCH sg=(op1:OperationPoint WHERE op1.id = 'FR0000016210'),(op2:OperationPoint WHERE op2.id = 'UKB1014')
+MERGE (op1)-[:SECTION {sectionlength: point.distance(op1.geolocation, op2.geolocation)/1000.0, fix: true}]->(op2);
+```
+
 What you will also recognize is, that there are parts not connected to the railway network. That might be privately used OPs and sections or it also could be an issue of missing data in the data sets of that particular country. This is a way to find them:
 
 ```cypher
