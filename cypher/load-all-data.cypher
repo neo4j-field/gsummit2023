@@ -106,7 +106,7 @@ MATCH (source:OperationPoint WHERE source.id = row.source)
 MATCH (target:OperationPoint WHERE target.id = row.target)
 MERGE (source)-[:SECTION {sectionlength: toFloat(row.sectionlength)}]->(target);
 
-LOAD CSV WITH HEADERS FROM $TrackPointDir + "/SECTION_UK.csv" as row FIELDTERMINATOR ";"
+LOAD CSV WITH HEADERS FROM $TrackPointDir + "/SECTION_UK.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)
 MATCH (target:OperationPoint WHERE target.id = row.target)
 MERGE (source)-[:SECTION {sectionlength: toFloat(row.sectionlength)}]->(target);
