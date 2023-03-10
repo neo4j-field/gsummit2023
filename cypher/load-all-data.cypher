@@ -1,4 +1,4 @@
-MATCH(o) DETACH DELETE o; // Cleaning up from a previous attempt
+MATCH(o) DETACH DELETE o;
 
 :param OpPointsDir => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/nodes';
 :param TrackPointDir => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/relationships';
@@ -53,7 +53,7 @@ CREATE (op)-[:NAMED {country: "NL"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row FIELDTERMINATOR ";"
 MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
-CREATE (op)-[:NAMED {country: "NL"}]->(:OperationPointName {name: row.name});
+CREATE (op)-[:NAMED {country: "UK"}]->(:OperationPointName {name: row.name});
 
 //
 // Chaining up sections
@@ -164,7 +164,7 @@ MATCH (op:OperationPoint WHERE op.id = row.id)
 CALL apoc.create.addLabels( id(op), [ row.extralabel ] ) YIELD node
 RETURN count(*);
 
-LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row FIELDTERMINATOR ";"
+LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row  FIELDTERMINATOR ";"
 MATCH (op:OperationPoint WHERE op.id = row.id)
 CALL apoc.create.addLabels( id(op), [ row.extralabel ] ) YIELD node
 RETURN count(*);
@@ -221,21 +221,24 @@ SET s.speed = toFloat(row.trackspeed);
 // by finding the closest distance between geo point of the POI and the next
 // available station / passenger stop geo point
 //
+
 LOAD CSV WITH HEADERS FROM $filePOIs AS line FIELDTERMINATOR ';'
 WITH line.CITY AS city, line.POI_DESCRIPTION AS description, line.LINK_FOTO AS linkFoto, line.LINK_WEBSITE AS linkWeb, line.LAT AS lat, line.LONG AS long, line.SECRET AS secret
 CREATE (po:POI {geolocation:point({latitude: toFloat(lat),longitude: toFloat(long)})})
 SET po.description = description,
-po.city = city, 
+po.city = city,
 po.linkWebSite = linkWeb,
 po.linkFoto = linkFoto,
 po.long = toFloat(long),
 po.lat = toFloat(lat),
-po.secret = toBoolean(secret)
-WITH *
-MATCH (h:OperationPoint)--(s:Station)
-WITH h,collect(s) as stations, po
-WITH po,apoc.agg.minItems(h,point.distance(h.geolocation,po.geolocation)).items[0] AS hub
-MERGE (hub)-[:HAS_POI]->(po)
-RETURN count(hub);
+po.secret = toBoolean(secret);
+
+MATCH (poi:POI)
+MATCH (op:OperationPoint) 
+WHERE "Station" IN labels(op) or "SmallStation" IN labels(op)
+WITH poi, op, point.distance(poi.geolocation, op.geolocation) as distance
+ORDER by distance
+WITH poi, collect(op)[0] as closest
+MERGE (closest)-[:IS_NEAR]->(poi);
 
 // ==== DONE LOADING ====
