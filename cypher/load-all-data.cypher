@@ -49,7 +49,7 @@ LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_NL.csv" as row
 MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
 CREATE (op)-[:NAMED {country: "NL"}]->(:OperationPointName {name: row.name});
 
-LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row
+LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row FIELDTERMINATOR ";"
 MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
 CREATE (op)-[:NAMED {country: "NL"}]->(:OperationPointName {name: row.name});
 
