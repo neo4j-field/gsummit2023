@@ -207,7 +207,7 @@ RETURN path, weight;
 
 ### Graph Data Science (GDS)
 
-Project a graph named 'OperationPoints' Graph into memory. We only take the "OperationPoint " Node and the "SECTION"
+Project a graph named 'OperationPoints' into memory. We only take the "OperationPoint " Node and the "SECTION"
 relationship:
 ```cypher
 // CALL gds.graph.drop('OperationPoints'); /// optional
@@ -232,7 +232,7 @@ YIELD index, sourceNode, targetNode, totalCost, nodeIds, costs, path
 RETURN *;
 ```
 
-Now we use the Weakly Connected Components Algo to identify those nodes that are not well connected to the neetwork:
+Now we use the Weakly Connected Components Algo to identify those nodes that are not well connected to the network:
 ```cypher
 CALL gds.wcc.stream('OperationPoints') YIELD nodeId, componentId
 WITH collect(gds.util.asNode(nodeId).shortcut) AS lista, componentId
