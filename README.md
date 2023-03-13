@@ -241,7 +241,7 @@ RETURN lista,componentId;
 
 Matching a specific OperationPoint  from the list above --> use the Neo4j browser output to check the network it is belonging to (see the README file for more information). You will figure out, that it is an isolated network of OperationPoint s / stations / etc.:
 ```cypher
-MATCH (op:OperationPoints) WHERE op.id='BEFBMZ' RETURN op;
+MATCH (op:OperationPoint) WHERE op.id='BEFBMZ' RETURN op;
 ```
 
 Use the betweenness centrality algo, to find out hot spots in terms of
