@@ -1,58 +1,68 @@
-MATCH(o) DETACH DELETE o;
+MATCH(o) DETACH DELETE o; // optional, only if data exists and you want to clear the DB
 
 :param OpPointsDir => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/nodes';
 :param TrackPointDir => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/relationships';
 // Point of Interest Data
 :param filePOIs => 'https://raw.githubusercontent.com/neo4j-field/gsummit2023/main/data/POIs.csv';
 
-CREATE CONSTRAINT uc_OperationPoint_id IF NOT EXISTS FOR (op:OperationPoint) REQUIRE op.id IS UNIQUE;
-CREATE INDEX index_OperationPointName_name IF NOT EXISTS FOR (opn:OperationPointName) ON (opn.name);
+CREATE CONSTRAINT uc_OperationPoint_id IF NOT EXISTS FOR (op:OperationPoint) REQUIRE (op.id) IS UNIQUE;
 
 //
 // Loading Operations Points from all available countries
 //
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_DE.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "DE"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_BE.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "BE"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_DK.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "DK"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_SE.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "SE"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_FR.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "FR"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_ES.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "ES"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_IT.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "IT"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_CH.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "CH"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_LU.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "LU"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_NL.csv" as row
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "NL"}]->(:OperationPointName {name: row.name});
 
 LOAD CSV WITH HEADERS FROM $OpPointsDir + "/OperationPoint_UK.csv" as row FIELDTERMINATOR ";"
-MERGE (op:OperationPoint {id: row.id, geolocation: Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})})
+MERGE (op:OperationPoint {id: row.id})
+SET op.geolocation = Point({latitude: toFloat(row.latitude), longitude: toFloat(row.longitude)})
 CREATE (op)-[:NAMED {country: "UK"}]->(:OperationPointName {name: row.name});
 
 //
@@ -215,6 +225,9 @@ SET s.speed = toFloat(row.trackspeed);
 LOAD CSV WITH HEADERS FROM $TrackPointDir + "/SECTION_UK_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
 SET s.speed = toFloat(row.trackspeed);
+
+// Create one more index for the Operation Point name
+CREATE INDEX index_OperationPointName_name IF NOT EXISTS FOR (opn:OperationPointName) ON (opn.name);
 
 //
 // Loading Point of Interest and matching the closest station automtically
