@@ -103,8 +103,8 @@ RETURN *;
 
 // Now we use the Weakly Connected Components Algo
 CALL gds.wcc.stream('OperationPoints') YIELD nodeId, componentId
-WITH collect(gds.util.asode(nodeId).shortcut) AS lista, componentId
-RETURN lista,componentId;
+WITH collect(gds.util.asNode(nodeId).id) AS lista, componentId
+RETURN lista,componentId order by size(lista) ASC;
 
 // Matching a specific OperationPoint  from the list above --> use the Neo4j browser output to check the network it is belonging to (see the README file for more information). You will figure out, that it is an isolated network of OperationPoint s / stations / etc.:
 MATCH (op:OperationPoints) WHERE op.id='BEFBMZ' RETURN op;
