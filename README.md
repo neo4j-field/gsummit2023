@@ -9,14 +9,14 @@ It provides a playground for further experiments or can be used to "advertise" t
 
 #### About the data that is been used
 
-The datasets used here, describes a network of railroad tracks and places (so called operation points) 
-connected to those tracks (called sections here). Operation Points can be a variaty of places like a Stations, a Switches, etc., see more examples below.
+The datasets used here, describes a network of railroad sections and places (so called operation points) 
+connected by so called sections. Operation Points can be a variaty of places like a Stations, a Switches, etc., see more examples below.
 
 The dataset is essentailly a "small" digital twin of the existing rail network in the EU countries.
 
 The dataset is freely available on the portal of the *European Union Agency for Railways and can be downloaded from their webpage. It offers many more parameters, e.g. type of power source and many more. We are not using all available parameters in this workshop, to keep it's complexity low. Data download is available in different formats e.g. xml or XLMS and we had to convert them into CSV to make loading more comfortable with cypher statements.
 
-- [Original Track/Operation Point Data](https://data-interop.era.europa.eu/search) comes from the European Union Agency for Railways.
+- [Original Section/Operation Point Data](https://data-interop.era.europa.eu/search) comes from the European Union Agency for Railways.
 
 ---
 ## Explaining the data set
@@ -30,7 +30,7 @@ The Sections have the following interesting **Properties** loaded to the Graph:
 - source: start OP for this section
 - target: end OP for this section
 - sectionlength: the length in km of that section
-- trackspeed: max speed allowed on that section
+- sectionspeed: max speed allowed on that section
 
 #### Operation Points
 
@@ -80,7 +80,7 @@ If you would hide all labels except the label "OperationPoint" and "OperationPoi
 
 <img width="540" alt="Data Model - Digital Twin" src="https://github.com/neo4j-field/gsummit2023/blob/68b41bce4c3ecdd8c73da58f55b7c34790907f4d/images/data-model-with-poi.png">
 
-As you can see now in the data model, there is a OperationPoint label and it is connected to itself with a SECTION relationship. This means, OperationPoints are connected together and make up the track network (as in the real world). A station (or other Operation Units like Switches, Passenger Stop, etc.) are connected as a separate node by the "NAMED" relationship that represents their name, etc..
+As you can see now in the data model, there is a OperationPoint label and it is connected to itself with a SECTION relationship. This means, OperationPoints are connected together and make up the rail network (as in the real world). A station (or other Operation Units like Switches, Passenger Stop, etc.) are connected as a separate node by the "NAMED" relationship that represents their name, etc..
 
 4. Now you can find certain queries in the `./code` directory in the file called `all_queries.cypher` or if you keep on reading. Try them out by cutting and pasting them into the Neo4j browser like shown below. We will also do that in the workshop!
 
@@ -94,7 +94,7 @@ Show Operation Point Names and limit the number of returned OPs to 10:
 MATCH (op:OperationPointName) RETURN op LIMIT 10;
 ```
 
-Show OPs and limit the number of returned tracks to 50:
+Show OPs and limit the number of returned OPs to 50:
 ```cypher
 MATCH (op:OperationPoint) RETURN op LIMIT 50;
 ```
@@ -245,7 +245,7 @@ MATCH (op:OperationPoint) WHERE op.id='BEFBMZ' RETURN op;
 ```
 
 Use the betweenness centrality algo, to find out hot spots in terms of
-tracks running through a specific OperationPoint .
+sections running through a specific OperationPoint .
 ```cypher
 CALL gds.betweenness.stream('OperationPoints')
 YIELD nodeId, score
