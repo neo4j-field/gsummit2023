@@ -2,7 +2,7 @@
   "title": "Graph Summit 2023 - Digital Twin Workshop",
   "version": "2.2",
   "settings": {
-    "pagenumber": 1,
+    "pagenumber": 3,
     "editable": true,
     "fullscreenEnabled": true,
     "parameters": {
@@ -20,7 +20,9 @@
       "neodash_linkFoto": "https://image.jimcdn.com/app/cms/image/transf/none/path/sa6549607c78f5c11/image/i781101d80fd2cd46/version/1606400444/best-hidden-gems-in-germany-bamberg-copyright-feel-good-studio-european-best-destinations.jpg",
       "neodash_speedtime": "traveltime",
       "neodash_operationpointname_name_4": "Bruxelles-Midi | Brussel-Zuid",
-      "neodash_operationpointname_name_4_display": "Bruxelles-Midi | Brussel-Zuid"
+      "neodash_operationpointname_name_4_display": "Bruxelles-Midi | Brussel-Zuid",
+      "neodash_foto": "https://www.followmeaway.com/wp-content/uploads/2020/03/Hidden-Gems-in-Germany-Kamnitz-Gorge.jpg",
+      "neodash_web": "https://www.followmeaway.com/hidden-gems-in-germany/"
     },
     "disableRowLimiting": false
   },
@@ -477,6 +479,71 @@
           "selection": {},
           "settings": {
             "nodePositions": {}
+          }
+        }
+      ]
+    },
+    {
+      "title": "POI Overview",
+      "reports": [
+        {
+          "title": "List of POIs",
+          "query": "MATCH(po:POI)\nRETURN po.city AS City, po.description AS description, po.linkFoto AS Foto, po.linkWebSite AS Website;\n\n\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 0,
+          "y": 0,
+          "type": "table",
+          "selection": {},
+          "settings": {
+            "actionsRules": [
+              {
+                "condition": "Click",
+                "field": "City",
+                "value": "Foto",
+                "customization": "set variable",
+                "customizationValue": "foto"
+              },
+              {
+                "condition": "Click",
+                "field": "description",
+                "value": "Website",
+                "customization": "set variable",
+                "customizationValue": "web"
+              }
+            ],
+            "columnWidths": "[1,1,0.5,0.5]"
+          }
+        },
+        {
+          "title": "POI Foto",
+          "query": "![image]($neodash_foto)\n\n\n",
+          "width": 6,
+          "height": 3,
+          "x": 6,
+          "y": 0,
+          "type": "text",
+          "selection": {},
+          "settings": {
+            "replaceGlobalParameters": true,
+            "description": "POI Foto",
+            "fullscreenEnabled": true
+          }
+        },
+        {
+          "title": "Website (click on description button above)",
+          "query": "$neodash_web\n\n\n",
+          "width": 12,
+          "height": 4,
+          "x": 0,
+          "y": 3,
+          "type": "iframe",
+          "selection": {},
+          "settings": {
+            "replaceGlobalParameters": true,
+            "downloadImageEnabled": false,
+            "passGlobalParameters": false,
+            "fullscreenEnabled": false
           }
         }
       ]
