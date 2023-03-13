@@ -184,47 +184,47 @@ RETURN count(*);
 //
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_DE_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_BE_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_DK_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_SE_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_FR_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_ES_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_IT_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_CH_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_LU_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_NL_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 LOAD CSV WITH HEADERS FROM $SectionPointDir + "/SECTION_UK_speed.csv" as row
 MATCH (source:OperationPoint WHERE source.id = row.source)-[s:SECTION]->(target:OperationPoint WHERE target.id = row.target)
-SET s.speed = toFloat(row.Sectionspeed);
+SET s.speed = toFloat(row.sectionspeed);
 
 // Create one more index for the Operation Point name
 CREATE INDEX index_OperationPointName_name IF NOT EXISTS FOR (opn:OperationPointName) ON (opn.name);
