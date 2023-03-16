@@ -192,7 +192,7 @@ RETURN count(*);
 
 ```cypher
 // Cypher shortest path
-MATCH sg=shortestPath((op1 WHERE op1.id = 'BEFBMZ')-[SECTION*]-(op2 WHERE op2.id = 'DE000BL')) RETURN sg;
+MATCH sg=shortestPath((op1 WHERE op1.id = 'SECst')-[SECTION*]-(op2 WHERE op2.id = 'DE000BL')) RETURN sg;
 ```
 
 
