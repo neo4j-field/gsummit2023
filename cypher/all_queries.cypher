@@ -59,7 +59,7 @@ RETURN path;
 MATCH (:OperationPoint)-[r:SECTION]->(:OperationPoint)
 WHERE r.speed > 0
 WITH r, r.speed * (1000.0/3600.0) as speed_ms
-SET r.traveltim = r.sectionlength / speed_ms
+SET r.traveltime = r.sectionlength * 1000 / speed_ms
 RETURN count(*);
 
 // Shortest Path Queries using different Shortest Path functions in Neo4j
@@ -138,7 +138,7 @@ ORDER by distance LIMIT 1;
 MATCH (:OperationPoint)-[r:SECTION]->(:OperationPoint)
 WHERE r.speed > 0
 WITH r, r.speed * (1000.0/3600.0) as speed_ms
-SET r.traveltime = r.sectionlength / speed_ms
+SET r.traveltime = r.sectionlength * 1000 / speed_ms
 RETURN count(*);
 
 
