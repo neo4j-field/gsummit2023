@@ -182,7 +182,7 @@ You can add a technical property to the SECTION relationships that calculates th
 MATCH (:OperationPoint)-[r:SECTION]->(:OperationPoint)
 WHERE r.speed > 0
 WITH r, r.speed * (1000.0/3600.0) as speed_ms
-SET r.traveltime = r.sectionlength / speed_ms
+SET r.traveltime = r.sectionlength * 1000 / speed_ms
 RETURN count(*);
 ```
 **IMPORTANT** the above query needs to run for the NeoDash Dashboard to run entirely!
