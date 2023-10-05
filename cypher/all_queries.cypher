@@ -112,7 +112,7 @@ MATCH (op:OperationPoints) WHERE op.id='BEFBMZ' RETURN op;
 // Use the betweenness centrality algo
 CALL gds.betweenness.stream('OperationPoints')
 YIELD nodeId, score
-RETURN gds.util.asNde(nodeId).id AS id, score
+RETURN gds.util.asNode(nodeId).id AS id, score
 ORDER BY score DESC;
 
 
