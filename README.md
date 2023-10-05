@@ -82,7 +82,7 @@ If you would hide all labels except the label "**OperationPoint**" and "**Operat
 
 As you can see now in the data model, there is a OperationPoint label and it is connected to itself with a **SECTION** relationship. This means, OperationPoints are connected together and make up the rail network (as in the real world). A station (or other Operation Units like Switches, Passenger Stop, etc.) are connected as a separate node by the "**NAMED**" relationship that represents their name, etc..
 
-4. Now you can find certain queries in the ```./code``` directory in the file called ```all_queries.cypher``` or if you keep on reading. Try them out by cutting and pasting them into the Neo4j browser like shown below. We will also do that in the workshop!
+4. Now you can find certain queries in the ```./code``` directory in the file called ```all_queries.cypher``` or just keep on reading. Try them out by cutting and pasting them into the Neo4j browser like shown below. We will also do that in the workshop!
 
 ---
 ## Run some Cypher queries on your Graph (database)
