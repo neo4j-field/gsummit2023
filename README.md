@@ -256,7 +256,7 @@ MATCH (op:OperationPoint) WHERE op.id='BEFBMZ' RETURN op;
 ```
 
 Use the betweenness centrality algo, to find out hot spots in terms of
-sections running through a specific OperationPoint .
+sections running through a specific OperationPoint . **BE AWARE, this will run for several minutes because of the small hardware we are running on with the sandboxes!**
 ```cypher
 CALL gds.betweenness.stream('OperationPoints')
 YIELD nodeId, score
