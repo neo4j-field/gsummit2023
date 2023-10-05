@@ -70,7 +70,7 @@ The following high level steps are required, to build the demo environment (will
 1. Download and install [Neo4j Desktop](https://neo4j.com/download-center/). Since we use some Graph Data Science Algorithms during the demo, we require the **GDS Library** to be installed. **Installation instruction** can be found [here](https://neo4j.com/docs/desktop-manual/current/).
 - As an alternative, you can run an [Neo4j Sandbox for Data Scientists](https://sandbox.neo4j.com/?ref=neo4j-home-hero&persona=data-scientist) from (https://sandbox.neo4j.com/ and use an "Blank Sandbox" as shown in the slides.
 
-2. Open Neo4j Browser and run the ```load-all-data.cypher``` script from the ```code``` directory above. You can cut & paste the complete code into the Neo4j Browser command line.
+2. Open Neo4j Browser and run the ```load-all-data.cypher``` script from the ```cypher``` directory above. You can cut & paste the complete code into the Neo4j Browser command line.
 
 3. After the script has finished loading, you can check your data model. Run the command ```CALL db.schema.visualization``` in your Browser console. It should look like the following (maybe yours is a bit more mixed up):
 
@@ -82,7 +82,7 @@ If you would hide all labels except the label "**OperationPoint**" and "**Operat
 
 As you can see now in the data model, there is a OperationPoint label and it is connected to itself with a **SECTION** relationship. This means, OperationPoints are connected together and make up the rail network (as in the real world). A station (or other Operation Units like Switches, Passenger Stop, etc.) are connected as a separate node by the "**NAMED**" relationship that represents their name, etc..
 
-4. Now you can find certain queries in the ```./code``` directory in the file called ```all_queries.cypher``` or just keep on reading. Try them out by cutting and pasting them into the Neo4j browser like shown below. We will also do that in the workshop!
+4. Now you can find certain queries in the ```./cypher``` directory in the file called ```all_queries.cypher``` or just keep on reading. Try them out by cutting and pasting them into the Neo4j browser like shown below. We will also do that in the workshop!
 
 ---
 ## Run some Cypher queries on your Graph (database)
