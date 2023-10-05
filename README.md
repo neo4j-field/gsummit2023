@@ -131,6 +131,14 @@ Before we move on running some more complex queries we figured, there are gaps i
 
 Trying to do a shortest Path between Stockholm and Berlin, did not work initially. With some trail and error wie figured, there were two gaps on the way from Stockholm (id: 'SECst') and Berlin Main Station (id: 'DE000BL'). The gaps were between Nyborg with id DK00039 and OP DK00200. 
 
+Check it out yourselve first, before moving on fixing gaps. Run the following shortest path query:
+
+```cypher
+// Cypher shortest path between Stockholm Central and Berlin Main Station
+MATCH sg=shortestPath((op1:OperationPoint WHERE op1.id = 'SECst')-[SECTION*]-(op2:OperationPoint WHERE op2.id = 'DE000BL')) RETURN sg;
+```
+No worries because of the result of the shortest path query. We will run it again after fixing gaps.
+
 A second gap we found at the Border from Denmark to Germany close to Flensburg. The BorderPoint did not have a connection to both railway networks of Denmark and Germany. We fixed that with the following queries:
 
 Fixing the Gaps in Denmark:
@@ -191,7 +199,7 @@ RETURN count(*);
 ### Shortest Path Queries using different Shortest Path functions in Neo4j
 
 ```cypher
-// Cypher shortest path
+// Cypher shortest path between Stockholm Central and Berlin Main Station
 MATCH sg=shortestPath((op1:OperationPoint WHERE op1.id = 'SECst')-[SECTION*]-(op2:OperationPoint WHERE op2.id = 'DE000BL')) RETURN sg;
 ```
 
