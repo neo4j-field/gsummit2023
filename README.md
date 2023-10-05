@@ -102,14 +102,16 @@ MATCH (op:OperationPoint) RETURN op LIMIT 50;
 Show OperationPoints and Sections, have a look how those two queries defer!
 ```cypher
 MATCH path=(:OperationPoint)--(:OperationPoint) RETURN path LIMIT 100;
-
+```
+```cypher
 MATCH path=(:OperationPoint)-[:SECTION]->(:OperationPoint) RETURN path LIMIT 100;
 ```
 
 using the WHERE clause in two different way:
 ```cypher
 MATCH (op:OperationPoint {id:'SECst'}) RETURN op;
-
+```
+```cypher
 MATCH (op:OperationPoint) WHERE op.id='SECst' RETURN op;
 ```
 You can start exploring the graph in Neo4j Browser by clicking on the returned node and then clicking on the graph symbol to extend the node and see attached nodes. Go for a couple of sections and see, where it goes to.
@@ -174,7 +176,8 @@ What you will also recognize is, that there are parts not connected to the railw
 MATCH path=(a:OperationPoint WHERE NOT EXISTS{(a)-[:SECTION]-()})
 WHERE a.id STARTS WITH 'DK'
 RETURN path;
-
+```
+```cypher
 // or inside the complete dataset
 MATCH path=(a:OperationPoint WHERE NOT EXISTS{(a)-[:SECTION]-()})
 RETURN path;
