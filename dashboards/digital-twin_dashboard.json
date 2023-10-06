@@ -1,30 +1,31 @@
 {
   "title": "Graph Summit 2023 - Digital Twin Workshop",
-  "version": "2.2",
+  "version": "2.3",
   "settings": {
-    "pagenumber": 3,
+    "pagenumber": 0,
     "editable": true,
     "fullscreenEnabled": true,
     "parameters": {
       "neodash_chapter_cityname": "",
-      "neodash_countrycode": "UK",
-      "neodash_operationpointname_name_1": "Berlin Hauptbahnhof - Lehrter Bahnhof",
-      "neodash_operationpointname_name_1_display": "Berlin Hauptbahnhof - Lehrter Bahnhof",
+      "neodash_countrycode": "NL",
+      "neodash_operationpointname_name_1": "Frankfurt (Main) Hbf",
+      "neodash_operationpointname_name_1_display": "Frankfurt (Main) Hbf",
       "neodash_station_name_1": "",
       "neodash_station_name_1_display": "",
-      "neodash_operationpointname_name_2": "München Hbf",
-      "neodash_operationpointname_name_2_display": "München Hbf",
-      "neodash_operationpointname_name_3": "Berlin Hauptbahnhof - Lehrter Bahnhof",
-      "neodash_operationpointname_name_3_display": "Berlin Hauptbahnhof - Lehrter Bahnhof",
+      "neodash_operationpointname_name_2": "Amsterdam Centraal",
+      "neodash_operationpointname_name_2_display": "Amsterdam Centraal",
+      "neodash_operationpointname_name_3": "Amsterdam Centraal",
+      "neodash_operationpointname_name_3_display": "Amsterdam Centraal",
       "neodash_field1": "Speed",
-      "neodash_linkFoto": "https://image.jimcdn.com/app/cms/image/transf/none/path/sa6549607c78f5c11/image/i781101d80fd2cd46/version/1606400444/best-hidden-gems-in-germany-bamberg-copyright-feel-good-studio-european-best-destinations.jpg",
-      "neodash_speedtime": "traveltime",
-      "neodash_operationpointname_name_4": "Bruxelles-Midi | Brussel-Zuid",
-      "neodash_operationpointname_name_4_display": "Bruxelles-Midi | Brussel-Zuid",
-      "neodash_foto": "https://www.followmeaway.com/wp-content/uploads/2020/03/Hidden-Gems-in-Germany-Kamnitz-Gorge.jpg",
+      "neodash_linkFoto": " https://lp-cms-production.imgix.net/2021-06/GettyRF_522935191.jpg?auto=format&q=75&w=1920",
+      "neodash_speedtime": "sectionlength",
+      "neodash_operationpointname_name_4": "Frankfurt (Main) Hbf",
+      "neodash_operationpointname_name_4_display": "Frankfurt (Main) Hbf",
+      "neodash_foto": " https://www.followmeaway.com/wp-content/uploads/2020/03/Hidden-Gems-in-Germany-Devils-Bridge-Rakotzbrucke.jpg",
       "neodash_web": "https://www.followmeaway.com/hidden-gems-in-germany/"
     },
-    "disableRowLimiting": false
+    "disableRowLimiting": false,
+    "theme": "light"
   },
   "pages": [
     {
@@ -51,7 +52,8 @@
             ],
             "compact": false,
             "description": "Countries that have data submitted to the EU portal."
-          }
+          },
+          "id": "6b46ac51-0fe3-4dcd-9bf1-8a5d65a0d9f4"
         },
         {
           "title": "Map on Tracks",
@@ -63,14 +65,17 @@
           "type": "map",
           "selection": {
             "OperationPoint": "(no label)",
-            "BorderPoint": "(no label)",
-            "SmallStation": "(no label)",
             "Junction": "(no label)",
-            "passenger terminal": "(no label)",
-            "Station": "(no label)",
-            "Switch": "(no label)",
-            "DepotOrWorkshop": "(no label)",
-            "TrainTechnicalServices": "(no label)"
+            "PassengerTerminal": "id",
+            "SmallStation": "id",
+            "Station": "id",
+            "Switch": "id",
+            "FreightTerminal": "id",
+            "ShuntingYard": "id",
+            "TrainTechnicalServices": "id",
+            "DepotOrWorkshop": "id",
+            "PrivateSiding": "id",
+            "PassengerStop": "id"
           },
           "settings": {
             "autorun": true,
@@ -78,7 +83,70 @@
             "defaultRelWidth": 1.5,
             "defaultNodeSize": "small",
             "description": "Track in country $neodash_countrycode"
-          }
+          },
+          "id": "2955b73d-8b92-445d-8e03-623ea07cc591",
+          "schema": [
+            [
+              "OperationPoint",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Junction",
+              "id",
+              "geolocation"
+            ],
+            [
+              "PassengerTerminal",
+              "id",
+              "geolocation"
+            ],
+            [
+              "SmallStation",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Station",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Switch",
+              "id",
+              "geolocation"
+            ],
+            [
+              "FreightTerminal",
+              "id",
+              "geolocation"
+            ],
+            [
+              "ShuntingYard",
+              "id",
+              "geolocation"
+            ],
+            [
+              "TrainTechnicalServices",
+              "id",
+              "geolocation"
+            ],
+            [
+              "DepotOrWorkshop",
+              "id",
+              "geolocation"
+            ],
+            [
+              "PrivateSiding",
+              "id",
+              "geolocation"
+            ],
+            [
+              "PassengerStop",
+              "id",
+              "geolocation"
+            ]
+          ]
         },
         {
           "title": "Country Code shown",
@@ -92,7 +160,8 @@
           "settings": {
             "textAlign": "center",
             "verticalAlign": "middle"
-          }
+          },
+          "id": "d1afbdaa-7863-4c59-a6da-298a2ca28f73"
         },
         {
           "title": "Stations in country $neodash_countrycode",
@@ -107,7 +176,8 @@
             "fontSize": 64,
             "textAlign": "center",
             "verticalAlign": "middle"
-          }
+          },
+          "id": "233aa5b7-b028-45e6-a54a-a9e5be8b2f6a"
         },
         {
           "title": "Switches in country $neodash_countrycode",
@@ -122,7 +192,8 @@
             "fontSize": 64,
             "textAlign": "center",
             "verticalAlign": "middle"
-          }
+          },
+          "id": "66753d2a-da64-4f5f-9b32-8491ebc34037"
         },
         {
           "title": "Stop Points in country $neodash_countrycode",
@@ -137,10 +208,11 @@
             "fontSize": 64,
             "textAlign": "center",
             "verticalAlign": "middle"
-          }
+          },
+          "id": "15fdae11-de7c-492c-ad17-aa85f4cb7e10"
         },
         {
-          "title": "",
+          "title": "Station List",
           "query": "MATCH(op:OperationPoint)-[:NAMED]->(opn:OperationPointName)\nWHERE op.id STARTS WITH $neodash_countrycode \nAND labels(op)[1] IN ['Station','SmallStation'] \nRETURN opn.name AS Station\n\n\n",
           "width": 3,
           "height": 2,
@@ -150,7 +222,8 @@
           "selection": {},
           "settings": {
             "nodePositions": {}
-          }
+          },
+          "id": "9d99feff-d29c-47f5-b83a-01cb070f1e67"
         }
       ]
     },
@@ -174,7 +247,8 @@
             "propertyTypeDisplay": "name",
             "parameterName": "neodash_operationpointname_name_1",
             "id": "1"
-          }
+          },
+          "id": "cbf1d55b-6c58-4c55-a9e8-5536e46ef155"
         },
         {
           "title": "Destination",
@@ -195,7 +269,8 @@
             "id": "2",
             "overridePropertyDisplayName": false,
             "manualPropertyNameSpecification": true
-          }
+          },
+          "id": "dadae7a8-477b-4ea6-a343-88116140b8c5"
         },
         {
           "title": "POIs on your Track",
@@ -227,7 +302,8 @@
             ],
             "textAlign": "center",
             "verticalAlign": "middle"
-          }
+          },
+          "id": "2c44ae38-33b3-4d25-8659-02366cfbcc0a"
         },
         {
           "title": "Shortest Path Track to travel",
@@ -240,13 +316,65 @@
           "selection": {
             "OperationPoint": "id",
             "Station": "id",
+            "Junction": "id",
             "PassengerStop": "id",
             "Switch": "id",
-            "Junction": "id"
+            "TechnicalChange": "id",
+            "BorderPoint": "id",
+            "SmallStation": "id",
+            "PassengerTerminal": "id"
           },
           "settings": {
             "nodePositions": {}
-          }
+          },
+          "id": "38259c1d-82c4-425e-b6cf-924ff688a231",
+          "schema": [
+            [
+              "OperationPoint",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Station",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Junction",
+              "id",
+              "geolocation"
+            ],
+            [
+              "PassengerStop",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Switch",
+              "id",
+              "geolocation"
+            ],
+            [
+              "TechnicalChange",
+              "id",
+              "geolocation"
+            ],
+            [
+              "BorderPoint",
+              "id",
+              "geolocation"
+            ],
+            [
+              "SmallStation",
+              "id",
+              "geolocation"
+            ],
+            [
+              "PassengerTerminal",
+              "id",
+              "geolocation"
+            ]
+          ]
         },
         {
           "title": "Trip Length in km",
@@ -268,7 +396,8 @@
             "verticalAlign": "middle",
             "textAlign": "center",
             "fontSize": 64
-          }
+          },
+          "id": "27eb023d-5bf9-4836-844b-730622f5b9a3"
         },
         {
           "title": "Travel Map",
@@ -281,17 +410,72 @@
           "selection": {
             "OperationPoint": "(no label)",
             "Station": "(no label)",
+            "Junction": "(no label)",
             "PassengerStop": "(no label)",
             "Switch": "(no label)",
-            "Junction": "(no label)"
+            "TechnicalChange": "id",
+            "BorderPoint": "id",
+            "SmallStation": "id",
+            "PassengerTerminal": "id"
           },
           "settings": {
-            "nodePositions": {}
-          }
+            "nodePositions": {},
+            "separateOverlappingMarkers": true,
+            "clusterMarkers": false,
+            "defaultNodeSize": "medium"
+          },
+          "id": "6a75530c-37ec-4a56-8c6f-b95498cf1fd7",
+          "schema": [
+            [
+              "OperationPoint",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Station",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Junction",
+              "id",
+              "geolocation"
+            ],
+            [
+              "PassengerStop",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Switch",
+              "id",
+              "geolocation"
+            ],
+            [
+              "TechnicalChange",
+              "id",
+              "geolocation"
+            ],
+            [
+              "BorderPoint",
+              "id",
+              "geolocation"
+            ],
+            [
+              "SmallStation",
+              "id",
+              "geolocation"
+            ],
+            [
+              "PassengerTerminal",
+              "id",
+              "geolocation"
+            ]
+          ]
         },
         {
           "title": "POIs on the ride",
-          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_1})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_2})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', 'sectionlength') yield path as path\nWITH nodes(path) AS nodeset\nUNWIND nodeset AS nod\nMATCH(nod)-[:IS_NEAR]->(p:POI)\nRETURN p.city AS City, p.description AS Description, p.linkFoto AS Foto;\n\n\n",
+          "query": "MATCH (:OperationPointName {name: $neodash_operationpointname_name_1})<-[:NAMED]-(op1:OperationPoint)\nWITH op1.id AS startid\nMATCH (:OperationPointName {name: $neodash_operationpointname_name_2})<-[:NAMED]-(op2:OperationPoint)\nWITH op2.id AS destid, startid\nMATCH (source:OperationPoint WHERE source.id = startid), (target:OperationPoint WHERE target.id = destid)\nCALL apoc.algo.dijkstra(source, target, 'SECTION', 'sectionlength') yield path as path\nWITH nodes(path) AS nodeset\nUNWIND nodeset AS nod\nMATCH(nod)-[:IS_NEAR]->(p:POI)\nRETURN p.city AS City\n, p.description AS Description\n, ' ' + p.linkFoto AS __Foto;\n\n\n",
           "width": 4,
           "height": 4,
           "x": 0,
@@ -304,13 +488,14 @@
               {
                 "condition": "Click",
                 "field": "City",
-                "value": "Foto",
+                "value": "__Foto",
                 "customization": "set variable",
                 "customizationValue": "linkFoto"
               }
             ],
             "columnWidths": "[0.5,1,0]"
-          }
+          },
+          "id": "48a245af-09a6-437c-bf2b-c80785aa6b47"
         },
         {
           "title": "POI Foto",
@@ -324,7 +509,8 @@
           "settings": {
             "nodePositions": {},
             "replaceGlobalParameters": true
-          }
+          },
+          "id": "0edb59bf-1450-441a-a554-2b83dde0640f"
         }
       ]
     },
@@ -348,7 +534,8 @@
             "propertyTypeDisplay": "name",
             "parameterName": "neodash_operationpointname_name_3",
             "id": "3"
-          }
+          },
+          "id": "dd833e35-625d-4084-ae71-464cdbebeef1"
         },
         {
           "title": "Destination",
@@ -367,11 +554,12 @@
             "propertyTypeDisplay": "name",
             "parameterName": "neodash_operationpointname_name_4",
             "id": "4"
-          }
+          },
+          "id": "bce41430-c1e7-4fc8-b03c-5c806204457d"
         },
         {
           "title": "Select Speed OR Time",
-          "query": "RETURN 'sectionlength' AS Shortest, 'traveltime' AS Fastest;\n\n\n",
+          "query": "RETURN 'sectionlength' AS Shortest, 'traveltime' AS Fastest\n\n\n",
           "width": 3,
           "height": 1,
           "x": 6,
@@ -396,11 +584,12 @@
                 "customizationValue": "speedtime"
               }
             ]
-          }
+          },
+          "id": "ee8b1d7d-86f0-479f-bcbd-3dba7452f1a1"
         },
         {
           "title": "Calculation done for ",
-          "query": "# Calculation done on:\n# $neodash_speedtime\n",
+          "query": "## Calculation done on:\n### $neodash_speedtime\n",
           "width": 3,
           "height": 1,
           "x": 9,
@@ -410,7 +599,8 @@
           "settings": {
             "nodePositions": {},
             "replaceGlobalParameters": true
-          }
+          },
+          "id": "577c3c99-a11a-49d6-b053-1272c39b36e0"
         },
         {
           "title": "Travel by $neodash_speedtime",
@@ -422,19 +612,68 @@
           "type": "map",
           "selection": {
             "OperationPoint": "(no label)",
+            "PassengerTerminal": "id",
             "Station": "(no label)",
-            "Switch": "(no label)",
-            "PassengerStop": "(no label)",
-            "Junction": "(no label)",
-            "TechnicalChange": "(no label)",
-            "BorderPoint": "(no label)",
-            "SmallStation": "(no label)"
+            "Junction": "id",
+            "SmallStation": "id",
+            "Switch": "id",
+            "BorderPoint": "id",
+            "PassengerStop": "id",
+            "TechnicalChange": "id"
           },
           "settings": {
             "nodePositions": {},
             "defaultNodeSize": "small",
             "description": "Track of your journey"
-          }
+          },
+          "id": "7e85e8c9-a7a9-4416-98ee-8d8127cfb853",
+          "schema": [
+            [
+              "OperationPoint",
+              "id",
+              "geolocation"
+            ],
+            [
+              "PassengerTerminal",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Station",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Junction",
+              "id",
+              "geolocation"
+            ],
+            [
+              "SmallStation",
+              "id",
+              "geolocation"
+            ],
+            [
+              "Switch",
+              "id",
+              "geolocation"
+            ],
+            [
+              "BorderPoint",
+              "id",
+              "geolocation"
+            ],
+            [
+              "PassengerStop",
+              "id",
+              "geolocation"
+            ],
+            [
+              "TechnicalChange",
+              "id",
+              "geolocation"
+            ]
+          ]
         },
         {
           "title": "Travel Distance (km)",
@@ -450,7 +689,8 @@
             "fontSize": 64,
             "textAlign": "center",
             "verticalAlign": "middle"
-          }
+          },
+          "id": "ec37fd6f-9fa0-4cd1-a847-c1c8a54ab7b1"
         },
         {
           "title": "Travel Time (h)",
@@ -466,7 +706,8 @@
             "fontSize": 64,
             "textAlign": "center",
             "verticalAlign": "middle"
-          }
+          },
+          "id": "808ed6fa-a023-460e-a49d-6dcc42de223e"
         },
         {
           "title": "",
@@ -479,7 +720,8 @@
           "selection": {},
           "settings": {
             "nodePositions": {}
-          }
+          },
+          "id": "3aec12f7-f88d-457c-a828-8a64fc9992b1"
         }
       ]
     },
@@ -488,7 +730,7 @@
       "reports": [
         {
           "title": "List of POIs",
-          "query": "MATCH(po:POI)\nRETURN po.city AS City, po.description AS description, po.linkFoto AS Foto, po.linkWebSite AS Website;\n\n\n\n",
+          "query": "MATCH(po:POI)\nRETURN po.city AS City\n, po.description AS description\n, ' ' + po.linkFoto AS __Foto\n, po.linkWebSite AS Website ;\n\n\n\n",
           "width": 6,
           "height": 3,
           "x": 0,
@@ -500,20 +742,14 @@
               {
                 "condition": "Click",
                 "field": "City",
-                "value": "Foto",
+                "value": "__Foto",
                 "customization": "set variable",
                 "customizationValue": "foto"
-              },
-              {
-                "condition": "Click",
-                "field": "description",
-                "value": "Website",
-                "customization": "set variable",
-                "customizationValue": "web"
               }
             ],
             "columnWidths": "[1,1,0.5,0.5]"
-          }
+          },
+          "id": "a7fbdfd3-df0c-41a5-be67-33c3736e61ad"
         },
         {
           "title": "POI Foto",
@@ -528,7 +764,8 @@
             "replaceGlobalParameters": true,
             "description": "POI Foto",
             "fullscreenEnabled": true
-          }
+          },
+          "id": "9da6c49c-a320-49c7-b0f8-e87dacd47480"
         },
         {
           "title": "Website (click on description button above)",
@@ -540,19 +777,33 @@
           "type": "iframe",
           "selection": {},
           "settings": {
-            "replaceGlobalParameters": true,
+            "replaceGlobalParameters": false,
             "downloadImageEnabled": false,
-            "passGlobalParameters": false,
+            "passGlobalParameters": true,
             "fullscreenEnabled": false
-          }
+          },
+          "id": "0016a097-5dd3-469e-9503-00db14989d8a"
         }
       ]
     }
   ],
   "parameters": {},
   "extensions": {
-    "advanced-charts": true,
-    "styling": true,
-    "actions": true
+    "advanced-charts": {
+      "active": true
+    },
+    "styling": {
+      "active": true
+    },
+    "active": true,
+    "activeReducers": [
+      "DASHBOARD/EXTENSIONS/QUERY_TRANSLATOR/"
+    ],
+    "actions": {
+      "active": true
+    },
+    "query-translator": {
+      "active": true
+    }
   }
 }
