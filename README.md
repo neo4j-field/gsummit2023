@@ -183,7 +183,7 @@ MATCH path=(a:OperationPoint WHERE NOT EXISTS{(a)-[:SECTION]-()})
 RETURN path;
 ```
 
-### Last thing before moving to path analysis
+### Last things before moving to path analysis
 
 You can add a technical property to the SECTION relationships that calculates the time of travel on that section. It assumes, the train is going the max speed for that section. A query to add that is the following:
 
@@ -196,7 +196,21 @@ WITH r, r.speed * (1000.0/3600.0) as speed_ms
 SET r.traveltime = r.sectionlength * 1000 / speed_ms
 RETURN count(*);
 ```
-**IMPORTANT** the above query needs to run for the NeoDash Dashboard to run entirely!
+Since there are some sections without a speed information, we will add a speed to it and calculate travel time. That will enable us, to calculate time vs. speed later in NeoDash.
+
+```cypher
+MATCH ()-[s:SECTION]->()
+WHERE s.speed is null
+SET s.speed = toFloat(11)
+RETURN count(*);
+```
+
+```cypher
+MATCH ()-[s:SECTION]->()
+SET s.traveltime = s.sectionlength/(s.speed/3600);
+```
+
+**IMPORTANT** the above queries need to run for the NeoDash Dashboard to run entirely!
 
 
 ### Shortest Path Queries using different Shortest Path functions in Neo4j
@@ -260,7 +274,7 @@ sections running through a specific OperationPoint . **BE AWARE, this will run f
 ```cypher
 CALL gds.betweenness.stream('OperationPoints')
 YIELD nodeId, score
-RETURN gds.util.asNode(nodeId).id AS id, score
-ORDER BY score DESC;
+WITH gds.util.asNode(nodeId) AS op, score
+RETURN [(op)-[:NAMED]->(b)| b.name][0] as name, op.id as id, score ORDER BY score DESC limit 10;
 ```
 There is much more you can do, using this data set. This is just a teaser and we hope you have some more queries you find and test.
